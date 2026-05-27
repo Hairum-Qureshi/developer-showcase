@@ -10,7 +10,7 @@ export const CurrentUser = createParamDecorator(
     const userPayload = {
       user_id: user.user_id,
       username: user.username,
-      profilePictureSeed: `https://api.dicebear.com/9.x/identicon/svg?seed=${user.profilePictureSeed}`,
+      profilePicture: `https://api.dicebear.com/9.x/identicon/svg?seed=${user.profilePictureSeed}`,
       email: user.email,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
