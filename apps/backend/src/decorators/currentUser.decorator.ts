@@ -12,6 +12,7 @@ export const CurrentUser = createParamDecorator(
       username: user.username,
       profilePicture: `https://api.dicebear.com/9.x/identicon/svg?seed=${user.profilePictureSeed}`,
       email: user.email,
+      biography: user.biography,
       twitter_x_url: user.twitter_x_url,
       linkedin_url: user.linkedin_url,
       github_url: user.github_url,
