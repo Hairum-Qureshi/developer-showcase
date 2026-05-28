@@ -3,6 +3,9 @@ type UserPayload = {
   email: string;
   username: string;
   profilePictureSeed: string;
+  twitter_x_url: string;
+  linkedin_url: string;
+  github_url: string;
   createdAt: string;
   updatedAt: string;
 };
