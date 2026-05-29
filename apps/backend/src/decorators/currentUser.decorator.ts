@@ -16,8 +16,8 @@ export const CurrentUser = createParamDecorator(
       twitter_x_url: user.twitter_x_url,
       linkedin_url: user.linkedin_url,
       github_url: user.github_url,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
+      createdAt: user.created_at,
+      updatedAt: user.updated_at,
     };
     return userPayload;
   },
