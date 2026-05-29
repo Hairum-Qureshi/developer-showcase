@@ -6,10 +6,12 @@ import About from "../pages/About";
 import NotFound from "../pages/NotFound";
 import Profile from "../pages/Profile";
 import Feed from "../pages/Feed";
+import Navbar from "./Navbar";
 
 export default function App() {
   return (
     <BrowserRouter>
+      <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
