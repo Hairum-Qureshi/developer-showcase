@@ -1,23 +1,37 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
+import type { Request } from 'express';
+
+const cookieExtractor = (request: Request): string | null => {
+  const token = request?.cookies?.['auth-session'];
+  return token || null;
+};
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(@Inject('POSTGRES_POOL') private readonly sql: any) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        cookieExtractor,
+        ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ]),
       ignoreExpiration: false,
       secretOrKey: process.env.JWT_SECRET!,
     });
   }
 
-  async validate(payload: { id: string; sub: string }) {
-    const { id } = payload;
-    const user = await this.sql.query`SELECT * FROM users WHERE id = ${id}`;
-    if (!user || user.rows.length === 0) {
+  async validate(payload: { id?: string; user_id?: string; sub: string }) {
+    const userId = payload.user_id || payload.id;
+    if (!userId) {
+      throw new UnauthorizedException('Invalid token payload');
+    }
+
+    const user = await this.sql`SELECT * FROM users WHERE user_id = ${userId}`;
+    if (!user || !user.length) {
       throw new UnauthorizedException('Please log in first');
     }
-    return user.rows[0];
+
+    return user[0];
   }
 }
