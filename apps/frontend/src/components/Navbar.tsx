@@ -1,0 +1,25 @@
+import { Link } from "react-router-dom";
+import { useCurrentUser } from "../hooks/useCurrentUser";
+
+export default function Navbar() {
+  const { data: currentUser } = useCurrentUser();
+  return (
+    <div className="w-full p-4 text-slate-50 flex items-center justify-between bg-transparent absolute top-0 left-0 z-10">
+      <h1 className="text-2xl font-bold">Developer Showcase</h1>
+      <ul className="mt-2">
+        <li className="inline-block mr-4 hover:text-slate-400">
+          <Link to="/feed">Feed</Link>
+        </li>
+        <li className="inline-block mr-4 hover:text-slate-400">
+          <Link to={`/profile/${currentUser?.user_id}`}>Profile</Link>
+        </li>
+        <li className="inline-block mr-4 hover:text-slate-400">
+          <Link to="/explore">Explore</Link>
+        </li>
+        <li className="inline-block mr-4 hover:text-slate-400">
+          <Link to="/about">About</Link>
+        </li>
+      </ul>
+    </div>
+  );
+}
