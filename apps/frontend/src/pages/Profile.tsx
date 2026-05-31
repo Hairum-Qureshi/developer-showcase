@@ -3,15 +3,24 @@ import { useCurrentUser } from "../hooks/useCurrentUser";
 import { GitHubCalendar } from "react-github-calendar";
 import { FaPencilAlt } from "react-icons/fa";
 import { FaCheck } from "react-icons/fa6";
+import Markdown from "react-markdown";
+import useAccount from "../hooks/useAccount";
+import removeMd from "remove-markdown";
 
 export default function Profile() {
   const { data: currUserData } = useCurrentUser();
+  const { profileData } = useAccount();
   const [editMode, setEditMode] = useState(false);
-  const [biography, setBiography] = useState(currUserData?.biography || "");
+  const [biography, setBiography] = useState(profileData?.biography);
+  const { updateBiographyMutation } = useAccount();
+
+  // TODO - make it so that your GitHub username isn't hardcoded and it's dynamic
+  // TODO - make it so that the textarea restricts you from going beyond 400 characters with markdown
+  // TODO - make it so that when you hit the edit button, the textarea is populated with the current biography and not blank
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-slate-950 to-slate-900 max-h-auto">
-      <div className="w-3/4 m-auto p-10 absolute top-10 right-0 left-0 text-slate-50">
+      <div className="w-3/4 m-auto p-10 absolute top-20 right-0 left-0 text-slate-50">
         <div className="flex">
           <div className="w-1/4">
             <img
@@ -65,17 +74,22 @@ export default function Profile() {
           <div className="w-3/4">
             <div className="flex w-full">
               <h2 className="text-xl mb-4 font-mono">about_me.md</h2>
-              <button
-                className="ml-auto hover:cursor-pointer"
-                title="Edit about me"
-                onClick={() => setEditMode(!editMode)}
-              >
-                {editMode ? (
-                  <FaCheck className="text-xl text-green-600 hover:text-green-400 active:text-green-50" />
-                ) : (
-                  <FaPencilAlt className="text-slate-600 hover:text-slate-400 active:text-white" />
-                )}
-              </button>
+              {currUserData?.user_id === profileData?.user_id && (
+                <button
+                  className="ml-auto hover:cursor-pointer"
+                  title="Edit about me"
+                  onClick={() => setEditMode(!editMode)}
+                >
+                  {editMode ? (
+                    <FaCheck
+                      className="text-xl text-green-600 hover:text-green-400 active:text-green-50"
+                      onClick={() => updateBiographyMutation.mutate(biography)}
+                    />
+                  ) : (
+                    <FaPencilAlt className="text-slate-600 hover:text-slate-400 active:text-white" />
+                  )}
+                </button>
+              )}
             </div>
             <div className="border-t border-sky-800">
               {editMode ? (
@@ -86,23 +100,24 @@ export default function Profile() {
                     onChange={(e) => setBiography(e.target.value)}
                     placeholder="Write something about yourself..."
                   />
-                  <p className="text-sm mt-2 text-slate-600 ml-auto">
-                    This editor supports markdown
-                  </p>
+                  <div className="flex mt-2 text-sm text-slate-500 justify-between">
+                    <p>{removeMd(biography).length}/400 Characters Remaining</p>
+                    <p>This editor supports markdown</p>
+                  </div>
                 </div>
               ) : (
-                <p className="mt-5 text-gray-300 font-mono text-sm">
-                  {currUserData?.biography}
-                </p>
+                <div className="mt-5 text-gray-300 font-mono text-sm prose prose-invert">
+                  <Markdown>{profileData?.biography}</Markdown>
+                </div>
               )}
             </div>
             <div className="my-10">
               <h3 className="text-xl font-bold font-mono mb-2">
-                {currUserData?.username}'s Latest GitHub Contributions
+                {profileData?.username}'s Latest GitHub Contributions
               </h3>
               <div className="border-t border-sky-800 mb-3" />
               <div className="mt-4">
-                <GitHubCalendar username="Hairum-Qureshi" />
+                <GitHubCalendar username={profileData?.github_username} />
               </div>
             </div>
             <div className="my-10">
