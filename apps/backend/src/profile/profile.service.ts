@@ -28,4 +28,18 @@ export class ProfileService {
 
     return { message: 'Biography updated successfully' };
   }
+
+  async getProfile(userID: string) {
+    const [{ exists: userExists }] = await this
+      .sql`SELECT EXISTS(SELECT 1 FROM users WHERE user_id=${userID})`;
+
+    if (!userExists) throw new HttpException('User not found', 404);
+
+    const [userData] = await this
+      .sql`SELECT * FROM users WHERE user_id = ${userID}`;
+
+    delete userData.password_hash;
+
+    return userData;
+  }
 }
