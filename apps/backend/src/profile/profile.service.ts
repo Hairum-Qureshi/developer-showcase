@@ -39,6 +39,7 @@ export class ProfileService {
       .sql`SELECT * FROM users WHERE user_id = ${userID}`;
 
     delete userData.password_hash;
+    userData.profilePicture = `https://api.dicebear.com/9.x/identicon/svg?seed=${userData.profilePictureSeed}`;
 
     return userData;
   }
