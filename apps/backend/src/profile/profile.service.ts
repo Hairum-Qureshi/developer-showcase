@@ -40,6 +40,8 @@ export class ProfileService {
 
     delete userData.password_hash;
     userData.profilePicture = `https://api.dicebear.com/9.x/identicon/svg?seed=${userData.profilePictureSeed}`;
+    userData.createdAt = userData.created_at;
+    userData.updatedAt = userData.updated_at;
 
     return userData;
   }
