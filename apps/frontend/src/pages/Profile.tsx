@@ -24,23 +24,21 @@ export default function Profile() {
         <div className="flex">
           <div className="w-1/4">
             <img
-              src={currUserData?.profilePicture}
+              src={profileData?.profilePicture}
               alt="Profile Picture"
               className="w-32 h-32 rounded-md border border-sky-800 mb-4"
             />
-            <h1 className="text-2xl font-bold mb-2">
-              {currUserData?.username}
-            </h1>
-            <p className="text-gray-400 mb-4">{currUserData?.email}</p>
+            <h1 className="text-2xl font-bold mb-2">{profileData?.username}</h1>
+            <p className="text-gray-400 mb-4">{profileData?.email}</p>
             <p className="text-gray-400 mb-4">
-              Joined: {new Date(currUserData?.createdAt).toLocaleDateString()}
+              Joined: {new Date(profileData?.createdAt).toLocaleDateString()}
             </p>
             <div>
               <h3>Social Medias:</h3>
               <ul className="list-disc list-inside text-gray-300">
                 <li>
                   <a
-                    href={currUserData?.github_url}
+                    href={profileData?.github_url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-sky-400 hover:underline"
@@ -50,7 +48,7 @@ export default function Profile() {
                 </li>
                 <li>
                   <a
-                    href={currUserData?.twitter_x_url}
+                    href={profileData?.twitter_x_url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-sky-400 hover:underline"
@@ -60,7 +58,7 @@ export default function Profile() {
                 </li>
                 <li>
                   <a
-                    href={currUserData?.linkedin_url}
+                    href={profileData?.linkedin_url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-sky-400 hover:underline"
