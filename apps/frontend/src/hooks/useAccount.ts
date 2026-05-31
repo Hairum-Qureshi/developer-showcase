@@ -1,5 +1,6 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 import removeMd from "remove-markdown";
 
 export default function useAccount() {
@@ -32,5 +33,23 @@ export default function useAccount() {
     },
   });
 
-  return { updateBiographyMutation };
+  const { userId } = useParams();
+  const { data: profileData } = useQuery({
+    queryKey: ["profileData", userId],
+    queryFn: async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/profile/${userId}`,
+          {
+            withCredentials: true,
+          },
+        );
+        return response.data;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+  });
+
+  return { updateBiographyMutation, profileData };
 }
