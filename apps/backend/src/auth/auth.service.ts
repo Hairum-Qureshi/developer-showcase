@@ -5,6 +5,9 @@ import bcrypt from 'bcrypt';
 import SnowflakeId from 'snowflake-id';
 import { SignInDto } from '../DTOs/signIn.dto';
 import { JwtService } from '@nestjs/jwt';
+import { HttpService } from '@nestjs/axios';
+import { ConfigService } from '@nestjs/config';
+import { firstValueFrom } from 'rxjs';
 
 // TODO - need to add validation for usernames so that they don't contain special characters that could break the SQL queries as well as reserved keywords or SQL injection attempts or invalid characters.
 
@@ -13,6 +16,8 @@ export class AuthService {
   constructor(
     @Inject('POSTGRES_POOL') private readonly sql: any,
     private readonly jwtService: JwtService,
+    private readonly httpService: HttpService,
+    private readonly configService: ConfigService,
   ) {}
 
   getAuthCookieOptions() {
@@ -115,5 +120,71 @@ export class AuthService {
     });
 
     return { jwtToken, user_id };
+  }
+
+  async handleAccessToken(code: string) {
+    const url = 'https://github.com/login/oauth/access_token';
+
+    const body = {
+      client_id: this.configService.get<string>('GITHUB_CLIENT_ID'),
+      client_secret: this.configService.get<string>('GITHUB_CLIENT_SECRET'),
+      code: code,
+    };
+
+    const config = {
+      headers: {
+        Accept: 'application/json', // Ensures GitHub returns clean JSON instead of a query string
+      },
+    };
+
+    const response = await firstValueFrom(
+      this.httpService.post(url, body, config),
+    );
+
+    return response.data.access_token;
+  }
+
+  async getGitHubUserData(authorizationHeader: string) {
+    const response = await firstValueFrom(
+      this.httpService.get('https://api.github.com/user', {
+        headers: {
+          Authorization: authorizationHeader,
+        },
+      }),
+    );
+
+    const userEmails = await firstValueFrom(
+      this.httpService.get('https://api.github.com/user/emails', {
+        headers: {
+          Authorization: authorizationHeader,
+        },
+      }),
+    );
+
+    const { id, login, html_url, bio, avatar_url } = response.data;
+
+    const [{ exists: userExists }] = await this
+      .sql`SELECT EXISTS(SELECT 1 FROM users WHERE user_id=${id} AND github_oauth=true)`;
+
+    if (userExists) {
+      const jwtToken = this.jwtService.sign({
+        user_id: id,
+      });
+
+      console.log({ jwtToken, user_id: id });
+
+      return { jwtToken, user_id: id };
+    } else {
+      await this
+        .sql`INSERT INTO users (user_id, email, password_hash, username, github_url, biography, avatar, github_oauth) VALUES (${id}, ${userEmails.data[0].email}, ${'883c6117-32fe-5eae-b5fe-1a54025ee972'}, ${login}, ${html_url}, ${bio}, ${avatar_url}, ${true})`;
+
+      const jwtToken = this.jwtService.sign({
+        user_id: id,
+      });
+
+      return { jwtToken, user_id: id };
+    }
+
+    return response.data;
   }
 }
