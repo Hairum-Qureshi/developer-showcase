@@ -184,7 +184,5 @@ export class AuthService {
 
       return { jwtToken, user_id: id };
     }
-
-    return response.data;
   }
 }
