@@ -45,6 +45,9 @@ export default function useAuthForm() {
           email: email.toLowerCase().trim(),
           password: password.trim(),
         },
+        {
+          withCredentials: true,
+        },
       );
 
       return data;
