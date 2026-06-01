@@ -39,7 +39,9 @@ export class ProfileService {
       .sql`SELECT * FROM users WHERE user_id = ${userID}`;
 
     delete userData.password_hash;
-    userData.profilePicture = `https://api.dicebear.com/9.x/identicon/svg?seed=${userData.profilePictureSeed}`;
+    userData.profilePicture = userData.github_oauth
+      ? userData.avatar
+      : `https://api.dicebear.com/9.x/identicon/svg?seed=${userData.profilePictureSeed}`;
     userData.createdAt = userData.created_at;
     userData.updatedAt = userData.updated_at;
 
