@@ -1,7 +1,63 @@
 import axios from "axios";
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 export default function useAuthForm() {
-  const handleSignUp = async (
+  const navigate = useNavigate();
+
+  const signUpMutation = useMutation({
+    mutationFn: async ({
+      email,
+      username,
+      password,
+    }: {
+      email: string;
+      username: string;
+      password: string;
+    }) => {
+      const { data } = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/sign-up`,
+        {
+          email: email.toLowerCase().trim(),
+          username: username.toLowerCase().trim(),
+          password: password.trim(),
+        },
+      );
+
+      return data;
+    },
+    onError: (error) => {
+      console.error("Error during sign-up:", error);
+    },
+  });
+
+  const signInMutation = useMutation({
+    mutationFn: async ({
+      email,
+      password,
+    }: {
+      email: string;
+      password: string;
+    }) => {
+      const { data } = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/sign-in`,
+        {
+          email: email.toLowerCase().trim(),
+          password: password.trim(),
+        },
+      );
+
+      return data;
+    },
+    onError: (error) => {
+      console.error("Error during sign-in:", error);
+    },
+    onSuccess: (data) => {
+      navigate(`/profile/${data.user_id}`);
+    },
+  });
+
+  const handleSignUp = (
     e: React.FormEvent<HTMLFormElement>,
     email: string,
     username: string,
@@ -24,18 +80,14 @@ export default function useAuthForm() {
       return;
     }
 
-    try {
-      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/sign-up`, {
-        email: email.toLowerCase().trim(),
-        username: username.toLowerCase().trim(),
-        password: password.trim(),
-      });
-    } catch (error) {
-      console.error("Error during sign-up:", error);
-    }
+    signUpMutation.mutate({
+      email,
+      username,
+      password,
+    });
   };
 
-  const handleSignIn = async (
+  const handleSignIn = (
     e: React.FormEvent<HTMLFormElement>,
     email: string,
     password: string,
@@ -47,15 +99,16 @@ export default function useAuthForm() {
       return;
     }
 
-    try {
-      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/sign-in`, {
-        email: email.toLowerCase().trim(),
-        password: password.trim(),
-      });
-    } catch (error) {
-      console.error("Error during sign-in:", error);
-    }
+    signInMutation.mutate({
+      email,
+      password,
+    });
   };
 
-  return { handleSignUp, handleSignIn };
+  return {
+    handleSignUp,
+    handleSignIn,
+    signUpMutation,
+    signInMutation,
+  };
 }
