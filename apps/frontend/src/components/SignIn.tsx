@@ -1,5 +1,6 @@
 import { useState } from "react";
 import useAuthForm from "../hooks/useAuthForm";
+import GitHubAuthButton from "./GitHubAuthButton";
 
 export default function SignIn({
   setShowSignUp,
@@ -21,6 +22,7 @@ export default function SignIn({
       </p>
 
       <form className="space-y-5 mt-8">
+        <GitHubAuthButton />
         <div>
           <label
             htmlFor="email"

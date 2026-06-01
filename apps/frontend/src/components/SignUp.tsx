@@ -1,6 +1,7 @@
 import { useState } from "react";
 import useAuthForm from "../hooks/useAuthForm";
 import { Link } from "react-router-dom";
+import GitHubAuthButton from "./GitHubAuthButton";
 
 export default function SignUp({
   setShowSignUp,
@@ -29,7 +30,7 @@ export default function SignUp({
 
       {/* Form */}
       <form className="space-y-5">
-        {/* Username */}
+        <GitHubAuthButton />
         <div>
           <label
             htmlFor="username"
