@@ -29,7 +29,9 @@ export default function Profile() {
               className="w-32 h-32 rounded-md border border-sky-800 mb-4"
             />
             <h1 className="text-2xl font-bold mb-2">{profileData?.username}</h1>
-            <p className="text-gray-400 mb-4">{profileData?.email}</p>
+            {currUserData?.user_id === profileData?.user_id && (
+              <p className="text-gray-400 mb-4">{profileData?.email}</p>
+            )}
             <p className="text-gray-400 mb-4">
               Joined: {new Date(profileData?.createdAt).toLocaleDateString()}
             </p>
@@ -115,7 +117,7 @@ export default function Profile() {
               </h3>
               <div className="border-t border-sky-800 mb-3" />
               <div className="mt-4">
-                <GitHubCalendar username={profileData?.github_username} />
+                <GitHubCalendar username={profileData?.username} />
               </div>
             </div>
             <div className="my-10">
