@@ -7,6 +7,8 @@ type UserPayload = {
   twitter_x_url: string;
   linkedin_url: string;
   github_url: string;
+  github_oauth: boolean;
+  avatar: string;
   created_at: string;
   updated_at: string;
 };

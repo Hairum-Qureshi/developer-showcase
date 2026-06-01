@@ -1,5 +1,4 @@
 import "../css/index.css";
-
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "../pages/Home";
 import About from "../pages/About";
@@ -16,6 +15,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/profile/:userId" element={<Profile />} />
+        <Route path="/login/callback" element={<Home />} />
         <Route path="/feed" element={<Feed />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
