@@ -171,8 +171,6 @@ export class AuthService {
         user_id: id,
       });
 
-      console.log({ jwtToken, user_id: id });
-
       return { jwtToken, user_id: id };
     } else {
       await this
