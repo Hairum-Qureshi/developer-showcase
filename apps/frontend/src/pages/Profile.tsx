@@ -6,6 +6,7 @@ import { FaCheck } from "react-icons/fa6";
 import Markdown from "react-markdown";
 import useAccount from "../hooks/useAccount";
 import removeMd from "remove-markdown";
+import GitHubAuthButton from "../components/GitHubAuthButton";
 
 export default function Profile() {
   const { data: currUserData } = useCurrentUser();
@@ -17,6 +18,7 @@ export default function Profile() {
   // TODO - make it so that your GitHub username isn't hardcoded and it's dynamic
   // TODO - make it so that the textarea restricts you from going beyond 400 characters with markdown
   // TODO - make it so that when you hit the edit button, the textarea is populated with the current biography and not blank
+  // TODO - figure out the linking logic
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-slate-950 to-slate-900 max-h-auto">
@@ -113,11 +115,35 @@ export default function Profile() {
             </div>
             <div className="my-10">
               <h3 className="text-xl font-bold font-mono mb-2">
-                {profileData?.username}'s Latest GitHub Contributions
+                {currUserData?.user_id === profileData?.user_id
+                  ? "Your Latest GitHub Contributions"
+                  : `${profileData?.username}'s GitHub Contributions`}
               </h3>
               <div className="border-t border-sky-800 mb-3" />
               <div className="mt-4">
-                <GitHubCalendar username={profileData?.username} />
+                {profileData?.github_oauth ? (
+                  <GitHubCalendar username={profileData?.username} />
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-10 border border-sky-800 rounded-md bg-slate-950">
+                    {profileData?.user_id === currUserData?.user_id ? (
+                      <>
+                        <p className="text-gray-500 p-3">
+                          No GitHub data available. You will need to link your
+                          GitHub account in order for your contributions to show
+                          up here.
+                        </p>
+                        <div className="w-1/3">
+                          <GitHubAuthButton buttonText="Link GitHub Account" />
+                        </div>
+                      </>
+                    ) : (
+                      <p className="text-gray-500 p-3">
+                        {profileData?.username} has not linked their GitHub
+                        account, so their contributions cannot be displayed.
+                      </p>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
             <div className="my-10">
