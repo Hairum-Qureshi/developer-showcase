@@ -109,7 +109,6 @@ export default function useAuthForm() {
     });
   };
 
-  // convert to a mutation and invalidate currentUser query on success to ensure the app knows the user is signed out
   const signOutMutation = useMutation({
     mutationFn: async () => {
       await axios.post(
