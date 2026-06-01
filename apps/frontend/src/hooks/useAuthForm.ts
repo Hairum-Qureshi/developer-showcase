@@ -1,9 +1,10 @@
 import axios from "axios";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
 export default function useAuthForm() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const signUpMutation = useMutation({
     mutationFn: async ({
@@ -108,10 +109,31 @@ export default function useAuthForm() {
     });
   };
 
+  // convert to a mutation and invalidate currentUser query on success to ensure the app knows the user is signed out
+  const signOutMutation = useMutation({
+    mutationFn: async () => {
+      await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/sign-out`,
+        {},
+        {
+          withCredentials: true,
+        },
+      );
+    },
+    onSuccess: () => {
+      queryClient.setQueryData(["currentUser"], null);
+      navigate("/");
+    },
+    onError: (error) => {
+      console.error("Error during sign-out:", error);
+    },
+  });
+
   return {
     handleSignUp,
     handleSignIn,
     signUpMutation,
     signInMutation,
+    signOut: signOutMutation.mutate,
   };
 }
