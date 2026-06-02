@@ -1,4 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 
 @Injectable()
-export class PostService {}
+export class PostService {
+  constructor(@Inject('POSTGRES_POOL') private readonly sql: any) {}
+}
