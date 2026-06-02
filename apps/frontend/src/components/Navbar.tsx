@@ -23,12 +23,7 @@ export default function Navbar() {
         <li className="inline-block mr-4 hover:text-slate-400">
           <Link to={`/profile/${currentUser?.user_id}`}>Profile</Link>
         </li>
-        <li className="inline-block mr-4 hover:text-slate-400">
-          <Link to="/explore">Explore</Link>
-        </li>
-        <li className="inline-block mr-4 hover:text-slate-400">
-          <Link to="/about">About</Link>
-        </li>
+
         {currentUser && (
           <li
             className="inline-block mr-4 hover:text-slate-400 hover:cursor-pointer"
