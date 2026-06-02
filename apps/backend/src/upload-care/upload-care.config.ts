@@ -8,9 +8,7 @@ export const UploadCareConfig = {
     const PUBLIC_KEY = configService.get<string>('UPLOADCARE_PUBLIC_KEY');
 
     if (!PUBLIC_KEY) {
-      throw new Error(
-        'UploadCare public key must be provided in the environment variables.',
-      );
+      throw new Error('UploadCare public key must be provided.');
     }
 
     const client = new UploadClient({
