@@ -115,6 +115,17 @@ export default function PostForm() {
           </div>
           <div>
             <label className="block mb-2 text-lg text-slate-400">
+              Tags (comma separated, max 5){" "}
+              <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              placeholder="tag1, tag2, tag3, tag4, tag5"
+              className="w-full text-lg bg-transparent outline-none text-white border-b border-slate-500 pb-3"
+            />
+          </div>
+          <div>
+            <label className="block mb-2 text-lg text-slate-400">
               Link to your project repository (optional)
             </label>
             <input
