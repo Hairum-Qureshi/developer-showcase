@@ -23,7 +23,9 @@ export default function Feed() {
             </button>
           </div>
         )}
-        <div className="w-full border border-sky-900 mb-10 p-3 bg-slate-950 rounded-md justify-between flex items-center"></div>
+        <div className="w-full border border-sky-900 mb-10 p-3 bg-slate-950 rounded-md justify-between flex items-center">
+          Search Bar Goes Here
+        </div>
         <div className="flex space-x-3">
           <div className="w-3/4 border border-orange-500"></div>
           <div className="w-1/4 border border-white"></div>
