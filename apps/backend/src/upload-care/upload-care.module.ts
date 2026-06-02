@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
-import { UploadCareService } from './upload-care.service';
+import { UploadCareConfig } from './upload-care.config';
 
 @Module({
-  providers: [UploadCareService]
+  providers: [UploadCareConfig],
+  exports: [UploadCareConfig],
 })
 export class UploadCareModule {}
