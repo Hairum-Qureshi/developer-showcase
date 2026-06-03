@@ -47,4 +47,10 @@ export class ProfileService {
 
     return userData;
   }
+
+  async getAllUsers() {
+    const users = await this
+      .sql`SELECT user_id, username, profile_picture_seed, avatar FROM users`;
+    return users;
+  }
 }
