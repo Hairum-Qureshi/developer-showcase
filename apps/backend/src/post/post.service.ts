@@ -1,7 +1,10 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, Inject, Injectable } from '@nestjs/common';
 import { UploadClient } from '@uploadcare/upload-client';
 import { PostDto } from '../DTOs/post.dto';
 import SnowflakeId from 'snowflake-id';
+import DOMPurify from 'isomorphic-dompurify';
+import { remark } from 'remark';
+import strip from 'strip-markdown';
 
 @Injectable()
 export class PostService {
@@ -18,6 +21,25 @@ export class PostService {
     },
     user_id: string,
   ) {
+    const { title, content, projectRepoLink, liveProjectLink, tags } = postData;
+
+    const sanitizedContent = DOMPurify.sanitize(content, {
+      FORCE_BODY: true,
+    });
+
+    const strippedMarkdown = await remark()
+      .use(strip)
+      .process(sanitizedContent);
+
+    if (
+      strippedMarkdown.toString().length < 100 ||
+      strippedMarkdown.toString().length > 1000
+    )
+      throw new HttpException(
+        'Content must be between 100 and 1000 characters',
+        400,
+      );
+
     const snowflake = new SnowflakeId({
       mid: 42,
       offset: (2019 - 1970) * 31536000 * 1000,
@@ -53,6 +75,6 @@ export class PostService {
     }
 
     await this
-      .sql`INSERT INTO posts (post_id, user_id, title, content, project_repo_link, live_project_link, tags, thumbnail_url, slideshow_image_urls) VALUES (${postID}, ${user_id}, ${postData.title}, ${postData.content}, ${postData.projectRepoLink}, ${postData.liveProjectLink}, ${postData.tags}, ${thumbnailURL}, ${slideShowURLs})`;
+      .sql`INSERT INTO posts (post_id, user_id, title, content, project_repo_link, live_project_link, tags, thumbnail_url, slideshow_image_urls) VALUES (${postID}, ${user_id}, ${title}, ${sanitizedContent}, ${projectRepoLink}, ${liveProjectLink}, ${tags}, ${thumbnailURL}, ${slideShowURLs})`;
   }
 }
