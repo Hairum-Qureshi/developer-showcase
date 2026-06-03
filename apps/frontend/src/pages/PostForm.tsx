@@ -2,6 +2,7 @@ import { useState } from "react";
 import Markdown from "react-markdown";
 import ImageUploading from "react-images-uploading";
 import type { ImageListType } from "react-images-uploading";
+import usePost from "../hooks/usePost";
 
 export default function PostForm() {
   const [showRenderedMarkdown, setShowRenderedMarkdown] = useState(false);
@@ -9,6 +10,11 @@ export default function PostForm() {
   const [images, setImages] = useState<ImageListType>([]);
   const [thumbnail, setThumbnail] = useState<ImageListType>([]);
   const maxNumber = 9;
+  const [title, setTitle] = useState("");
+  const [tags, setTags] = useState("");
+  const [projectLink, setProjectLink] = useState("");
+  const [liveLink, setLiveLink] = useState("");
+  const { postMutation } = usePost();
 
   const onImageChange = (imageList: ImageListType) => {
     setImages(imageList);
@@ -81,7 +87,6 @@ export default function PostForm() {
           </p>
         </div>
         <div className="text-white space-y-8">
-          {/* Title Section */}
           <div>
             <label className="block mb-2 text-lg text-slate-400">
               Title <span className="text-red-500">*</span>
@@ -89,11 +94,11 @@ export default function PostForm() {
             <input
               type="text"
               placeholder="Title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
               className="w-full text-lg bg-transparent outline-none text-white border-b border-slate-500 pb-3"
             />
           </div>
-
-          {/* Content Section */}
           <div>
             <div className="flex justify-between items-center">
               <label className="block mb-2 text-lg text-slate-400">
@@ -127,14 +132,11 @@ export default function PostForm() {
               </>
             )}
           </div>
-
-          {/* Fixed Showcase Images Section */}
           <div>
             <label className="block mb-2 text-lg text-slate-400">
               Upload Images for Showcase (max 9){" "}
               <span className="text-red-500">*</span>
             </label>
-
             <ImageUploading
               multiple
               value={images}
@@ -147,7 +149,6 @@ export default function PostForm() {
                   <div className="grid grid-cols-3 gap-2 p-2">
                     {[...Array(maxNumber)].map((_, index) => {
                       const image = imageList[index];
-
                       return (
                         <div
                           key={index}
@@ -179,7 +180,6 @@ export default function PostForm() {
                               </div>
                             </>
                           ) : (
-                            // Click to upload if slot is empty
                             <button
                               type="button"
                               onClick={onImageUpload}
@@ -197,8 +197,6 @@ export default function PostForm() {
               )}
             </ImageUploading>
           </div>
-
-          {/* Links and Publish Buttons */}
           <div>
             <label className="block mb-2 text-lg text-slate-400">
               Tags (comma separated, max 5){" "}
@@ -207,6 +205,8 @@ export default function PostForm() {
             <input
               type="text"
               placeholder="tag1, tag2, tag3, tag4, tag5"
+              value={tags}
+              onChange={(e) => setTags(e.target.value)}
               className="w-full text-lg bg-transparent outline-none text-white border-b border-slate-500 pb-3"
             />
           </div>
@@ -217,6 +217,8 @@ export default function PostForm() {
             <input
               type="text"
               placeholder="https://yourproject.com"
+              value={projectLink}
+              onChange={(e) => setProjectLink(e.target.value)}
               className="w-full text-lg bg-transparent outline-none text-white border-b border-slate-500 pb-3"
             />
           </div>
@@ -227,11 +229,26 @@ export default function PostForm() {
             <input
               type="text"
               placeholder="https://yourproject.com"
+              value={liveLink}
+              onChange={(e) => setLiveLink(e.target.value)}
               className="w-full text-lg bg-transparent outline-none text-white border-b border-slate-500 pb-3"
             />
           </div>
           <div className="flex justify-end">
-            <button className="px-5 py-2 bg-sky-500 text-white rounded-md hover:bg-sky-600">
+            <button
+              className="px-5 py-2 bg-sky-500 text-white rounded-md hover:bg-sky-600"
+              onClick={() =>
+                postMutation.mutate({
+                  title,
+                  markdownDescription: markdownContent,
+                  tags,
+                  projectLink,
+                  liveLink,
+                  thumbnail: thumbnail[0]?.file as File,
+                  slideShowImages: images.map((img) => img.file) as File[],
+                })
+              }
+            >
               Publish
             </button>
           </div>
