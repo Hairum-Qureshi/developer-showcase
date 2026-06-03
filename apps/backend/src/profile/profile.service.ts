@@ -41,7 +41,7 @@ export class ProfileService {
     delete userData.password_hash;
     userData.profilePicture = userData.github_oauth
       ? userData.avatar
-      : `https://api.dicebear.com/9.x/identicon/svg?seed=${userData.profilePictureSeed}`;
+      : `https://api.dicebear.com/9.x/identicon/svg?seed=${userData.profile_picture_seed}`;
     userData.createdAt = userData.created_at;
     userData.updatedAt = userData.updated_at;
 
