@@ -21,6 +21,12 @@ export default function Navbar() {
           <Link to="/feed">Feed</Link>
         </li>
         <li className="inline-block mr-4 hover:text-slate-400">
+          <Link to="/users">All Users</Link>
+        </li>
+        <li className="inline-block mr-4 hover:text-slate-400">
+          <Link to="/new-post">New Post</Link>
+        </li>
+        <li className="inline-block mr-4 hover:text-slate-400">
           <Link to={`/profile/${currentUser?.user_id}`}>Profile</Link>
         </li>
 
