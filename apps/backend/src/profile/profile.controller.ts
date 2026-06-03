@@ -21,4 +21,9 @@ export class ProfileController {
   async getUserProfile(@Param('userID') userID: string) {
     return this.profileService.getProfile(userID);
   }
+
+  @Get('all-users')
+  async getAllUsers() {
+    return this.profileService.getAllUsers();
+  }
 }
