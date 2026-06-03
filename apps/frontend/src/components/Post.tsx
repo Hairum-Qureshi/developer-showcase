@@ -22,7 +22,11 @@ export default function Post({
           <button onClick={() => alert("Edit clicked")}>Edit</button>
           <button onClick={() => alert("Delete clicked")}>Delete</button>
         </div>
-        <img src={thumbnail} alt={title} className="h-56 w-full object-cover" />
+        <img
+          src={thumbnail}
+          alt={"Post Thumbnail"}
+          className="h-56 w-full object-cover"
+        />
       </div>
       <div className="p-5 space-y-3">
         <h2 className="text-lg font-semibold text-white tracking-tight">
@@ -30,22 +34,26 @@ export default function Post({
         </h2>
         <p className="text-sm text-slate-400 leading-relaxed">{description}</p>
         <div className="flex gap-3 pt-2">
-          <Link
-            to={githubLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-4 py-2 text-sm rounded-lg bg-slate-800 text-white hover:bg-slate-700 transition"
-          >
-            View GitHub
-          </Link>
-          <Link
-            to={liveDemoLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-4 py-2 text-sm rounded-lg border border-sky-500 text-sky-400 hover:bg-sky-500 hover:text-white transition"
-          >
-            Live Demo
-          </Link>
+          {githubLink && (
+            <Link
+              to={githubLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 py-2 text-sm rounded-lg bg-slate-800 text-white hover:bg-slate-700 transition"
+            >
+              View GitHub
+            </Link>
+          )}
+          {liveDemoLink && (
+            <Link
+              to={liveDemoLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 py-2 text-sm rounded-lg border border-sky-500 text-sky-400 hover:bg-sky-500 hover:text-white transition"
+            >
+              Live Demo
+            </Link>
+          )}
           <Link
             to={`/post/${postID}`}
             target="_blank"
