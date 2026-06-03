@@ -7,6 +7,7 @@ export default function Post({
   description,
   githubLink,
   liveDemoLink,
+  tags,
 }: {
   postID: string;
   thumbnail: string;
@@ -14,6 +15,7 @@ export default function Post({
   description: string;
   githubLink: string;
   liveDemoLink: string;
+  tags: string[];
 }) {
   return (
     <div className="group relative overflow-hidden rounded-2xl border border-slate-800 bg-gradient-to-r from-sky-500/10 via-transparent to-purple-500/10 shadow-md">
@@ -56,12 +58,21 @@ export default function Post({
           )}
           <Link
             to={`/post/${postID}`}
-            target="_blank"
             rel="noopener noreferrer"
             className="px-4 py-2 text-sm rounded-lg border border-sky-500 text-sky-400 hover:bg-sky-500 hover:text-white transition"
           >
             View Post
           </Link>
+        </div>
+        <div className="flex flex-wrap gap-2 pt-3">
+          {tags.map((tag, index) => (
+            <span
+              key={index}
+              className="text-sm bg-slate-700 text-slate-300 px-2 py-1 rounded-lg"
+            >
+              {tag}
+            </span>
+          ))}
         </div>
       </div>
       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition pointer-events-none">
