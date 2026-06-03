@@ -1,9 +1,10 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function usePost() {
   const { userId, postId } = useParams();
+  const navigate = useNavigate();
 
   const postMutation = useMutation({
     mutationFn: async ({
@@ -59,6 +60,9 @@ export default function usePost() {
           (error as AxiosError).response?.data,
         );
       }
+    },
+    onSuccess: (data) => {
+      navigate(`/post/${data.postID}`);
     },
   });
 
