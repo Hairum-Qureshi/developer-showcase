@@ -77,4 +77,44 @@ export class PostService {
     await this
       .sql`INSERT INTO posts (post_id, user_id, title, content, project_repo_link, live_project_link, tags, thumbnail_url, slideshow_image_urls) VALUES (${postID}, ${user_id}, ${title}, ${sanitizedContent}, ${projectRepoLink}, ${liveProjectLink}, ${tags}, ${thumbnailURL}, ${slideShowURLs})`;
   }
+
+  async getPostByID(postID: string) {
+    const [{ exists: postExists }] = await this
+      .sql`SELECT EXISTS(SELECT 1 FROM posts WHERE post_id=${postID})`;
+
+    if (!postExists) throw new HttpException('Post not found', 404);
+
+    const [post] = await this.sql`
+      SELECT
+        posts.post_id,
+        posts.thumbnail_url,
+        posts.title,
+        posts.content,
+        posts.slideshow_image_urls,
+        posts.project_repo_link,
+        posts.live_project_link,
+        posts.tags,
+        posts.created_at,
+
+        json_build_object(
+          'user_id', users.user_id,
+          'username', users.username,
+          'profile_picture_seed', users.profile_picture_seed,
+          'avatar', users.avatar 
+        ) AS user
+
+        FROM posts
+        JOIN users
+          ON posts.user_id = users.user_id
+        WHERE posts.post_id = ${postID};
+      `;
+
+    return post;
+  }
+
+  async getAllPostsByUserID(userID: string) {
+    const posts = await this
+      .sql`SELECT * FROM posts WHERE user_id = ${userID} ORDER BY created_at DESC`;
+    return posts;
+  }
 }
