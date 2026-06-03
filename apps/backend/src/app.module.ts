@@ -4,6 +4,8 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { ProfileModule } from './profile/profile.module';
+import { UploadCareModule } from './upload-care/upload-care.module';
+import { PostModule } from './post/post.module';
 
 @Module({
   imports: [
@@ -12,6 +14,8 @@ import { ProfileModule } from './profile/profile.module';
     }),
     AuthModule,
     ProfileModule,
+    UploadCareModule,
+    PostModule,
   ],
   controllers: [AppController],
   providers: [AppService],

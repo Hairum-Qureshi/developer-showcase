@@ -1,0 +1,80 @@
+import { HttpException, Inject, Injectable } from '@nestjs/common';
+import { UploadClient } from '@uploadcare/upload-client';
+import { PostDto } from '../DTOs/post.dto';
+import SnowflakeId from 'snowflake-id';
+import DOMPurify from 'isomorphic-dompurify';
+import { remark } from 'remark';
+import strip from 'strip-markdown';
+
+@Injectable()
+export class PostService {
+  constructor(
+    @Inject('POSTGRES_POOL') private readonly sql: any,
+    @Inject('UploadCare') private readonly uploadCare: UploadClient,
+  ) {}
+
+  async createPost(
+    postData: PostDto,
+    files: {
+      thumbnail?: Express.Multer.File[];
+      slideShowImages?: Express.Multer.File[];
+    },
+    user_id: string,
+  ) {
+    const { title, content, projectRepoLink, liveProjectLink, tags } = postData;
+
+    const sanitizedContent = DOMPurify.sanitize(content, {
+      FORCE_BODY: true,
+    });
+
+    const strippedMarkdown = await remark()
+      .use(strip)
+      .process(sanitizedContent);
+
+    if (
+      strippedMarkdown.toString().length < 100 ||
+      strippedMarkdown.toString().length > 1000
+    )
+      throw new HttpException(
+        'Content must be between 100 and 1000 characters',
+        400,
+      );
+
+    const snowflake = new SnowflakeId({
+      mid: 42,
+      offset: (2019 - 1970) * 31536000 * 1000,
+    });
+
+    const postID = snowflake.generate();
+    let thumbnailURL: string | undefined = undefined;
+    const slideShowURLs: string[] = [];
+
+    const thumbnailFile = files.thumbnail?.[0];
+    if (thumbnailFile) {
+      await this.uploadCare
+        .uploadFile(thumbnailFile.buffer, {
+          fileName: `post-${postID}-thumbnail`,
+        })
+        .then((file) => {
+          thumbnailURL = `https://ky3lm3s6xp.ucarecd.net/${file.uuid}`;
+        });
+    }
+
+    const slideShowFiles = files.slideShowImages || [];
+    if (slideShowFiles.length) {
+      for (const [index, file] of slideShowFiles.entries()) {
+        await this.uploadCare
+          .uploadFile(file.buffer, {
+            fileName: `post-${postID}-slide-${index}`,
+          })
+          .then((uploadedFile) => {
+            const fileURL = `https://ky3lm3s6xp.ucarecd.net/${uploadedFile.uuid}/`;
+            slideShowURLs.push(fileURL);
+          });
+      }
+    }
+
+    await this
+      .sql`INSERT INTO posts (post_id, user_id, title, content, project_repo_link, live_project_link, tags, thumbnail_url, slideshow_image_urls) VALUES (${postID}, ${user_id}, ${title}, ${sanitizedContent}, ${projectRepoLink}, ${liveProjectLink}, ${tags}, ${thumbnailURL}, ${slideShowURLs})`;
+  }
+}
