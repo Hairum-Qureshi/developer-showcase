@@ -1,7 +1,10 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
+import { useParams } from "react-router-dom";
 
 export default function usePost() {
+  const { userId } = useParams();
+
   const postMutation = useMutation({
     mutationFn: async ({
       title,
@@ -59,5 +62,22 @@ export default function usePost() {
     },
   });
 
-  return { postMutation };
+  const { data: allPostsData } = useQuery({
+    queryKey: ["posts", userId],
+    queryFn: async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/post/all/${userId}`,
+          {
+            withCredentials: true,
+          },
+        );
+        return response.data;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+  });
+
+  return { postMutation, allPostsData };
 }
