@@ -1,6 +1,8 @@
 import {
   Body,
   Controller,
+  Get,
+  Param,
   Post,
   UploadedFiles,
   UseGuards,
@@ -35,5 +37,17 @@ export class PostController {
     @CurrentUser() user: UserPayload,
   ) {
     return this.postService.createPost(postData, files, user.user_id);
+  }
+
+  @Get(':postID')
+  @UseGuards(AuthGuard())
+  async getPost(@Param('postID') postID: string) {
+    return this.postService.getPostByID(postID);
+  }
+
+  @Get('all/:userID')
+  @UseGuards(AuthGuard())
+  async getAllPostsByUserID(@Param('userID') userID: string) {
+    return this.postService.getAllPostsByUserID(userID);
   }
 }
