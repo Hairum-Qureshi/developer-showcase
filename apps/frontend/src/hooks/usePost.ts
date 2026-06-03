@@ -3,7 +3,7 @@ import axios, { AxiosError } from "axios";
 import { useParams } from "react-router-dom";
 
 export default function usePost() {
-  const { userId } = useParams();
+  const { userId, postId } = useParams();
 
   const postMutation = useMutation({
     mutationFn: async ({
@@ -66,6 +66,8 @@ export default function usePost() {
     queryKey: ["posts", userId],
     queryFn: async () => {
       try {
+        if (!userId) return;
+
         const response = await axios.get(
           `${import.meta.env.VITE_BACKEND_URL}/api/post/all/${userId}`,
           {
@@ -79,5 +81,24 @@ export default function usePost() {
     },
   });
 
-  return { postMutation, allPostsData };
+  const { data: postData } = useQuery({
+    queryKey: ["post", postId],
+    queryFn: async () => {
+      try {
+        if (!postId) return;
+
+        const response = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/post/${postId}`,
+          {
+            withCredentials: true,
+          },
+        );
+        return response.data;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+  });
+
+  return { postMutation, allPostsData, postData };
 }
