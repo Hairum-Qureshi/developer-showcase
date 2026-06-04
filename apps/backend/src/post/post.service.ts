@@ -5,12 +5,17 @@ import SnowflakeId from 'snowflake-id';
 import DOMPurify from 'isomorphic-dompurify';
 import { remark } from 'remark';
 import strip from 'strip-markdown';
+import { HttpService } from '@nestjs/axios';
+import { firstValueFrom } from 'rxjs';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class PostService {
   constructor(
     @Inject('POSTGRES_POOL') private readonly sql: any,
     @Inject('UploadCare') private readonly uploadCare: UploadClient,
+    private readonly httpService: HttpService,
+    private readonly configService: ConfigService,
   ) {}
 
   async createPost(
@@ -130,8 +135,35 @@ export class PostService {
 
     if (!postExists) throw new HttpException('Post not found', 404);
 
+    const postImageURLs = await this
+      .sql`SELECT thumbnail_url, slideshow_image_urls FROM posts WHERE post_id=${postID}`;
+
+    const imageURLs = [
+      postImageURLs[0].thumbnail_url,
+      ...postImageURLs[0].slideshow_image_urls,
+    ];
+
     await this
       .sql`DELETE FROM posts WHERE post_id=${postID} AND user_id=${userID}`;
+
+    for (const url of imageURLs) {
+      if (url) {
+        const fileID = url.split('/').pop()?.split('.')[0];
+        if (fileID) {
+          await firstValueFrom(
+            this.httpService.delete(
+              `https://api.uploadcare.com/files/${fileID}/storage/`,
+              {
+                headers: {
+                  Accept: 'application/vnd.uploadcare-v0.7+json',
+                  Authorization: `Uploadcare.Simple ${this.configService.get<string>('UPLOADCARE_PUBLIC_KEY')}:${this.configService.get<string>('UPLOADCARE_SECRET_KEY')}`,
+                },
+              },
+            ),
+          );
+        }
+      }
+    }
 
     return { message: 'Post deleted successfully' };
   }
