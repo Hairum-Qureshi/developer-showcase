@@ -8,7 +8,7 @@ export default function UserCard({
   joinedDate: string;
 }) {
   return (
-    <div className="bg-slate-900 p-3 rounded-sm hover:cursor-pointer hover:bg-slate-800 transition-colors duration-200">
+    <div className="bg-slate-900 p-3 rounded-sm hover:cursor-pointer hover:bg-slate-800 transition-colors duration-200 border border-blue-950 hover:border-blue-900">
       <div className="flex items-center space-x-3">
         <img
           src={
