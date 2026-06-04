@@ -65,7 +65,7 @@ export class PostService {
           fileName: `post-${postID}-thumbnail`,
         })
         .then((file) => {
-          thumbnailURL = `https://ky3lm3s6xp.ucarecd.net/${file.uuid}`;
+          thumbnailURL = `https://ky3lm3s6xp.ucarecd.net/${file.uuid}/`;
         });
     }
 
