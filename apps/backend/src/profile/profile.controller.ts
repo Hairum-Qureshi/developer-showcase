@@ -17,13 +17,15 @@ export class ProfileController {
     return this.profileService.updateBiography(user.user_id, biography);
   }
 
-  @Get(':userID')
-  async getUserProfile(@Param('userID') userID: string) {
-    return this.profileService.getProfile(userID);
-  }
-
   @Get('all-users')
+  @UseGuards(AuthGuard())
   async getAllUsers() {
     return this.profileService.getAllUsers();
+  }
+
+  @Get(':userID')
+  @UseGuards(AuthGuard())
+  async getUserProfile(@Param('userID') userID: string) {
+    return this.profileService.getProfile(userID);
   }
 }
