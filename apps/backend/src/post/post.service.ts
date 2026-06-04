@@ -151,7 +151,7 @@ export class PostService {
       if (url) {
         const fileID = url.split('/')[3];
         if (fileID) {
-          const response = await firstValueFrom(
+          await firstValueFrom(
             this.httpService.delete(
               `https://api.uploadcare.com/files/${fileID}/storage/`,
               {
@@ -162,8 +162,6 @@ export class PostService {
               },
             ),
           );
-
-          console.log('File deletion response:', response.data);
         }
       }
     }
