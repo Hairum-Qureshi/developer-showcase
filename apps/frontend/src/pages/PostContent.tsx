@@ -49,7 +49,7 @@ export default function PostContent() {
                 </p>
               </div>
             </div>
-            {currUserData?.id === postData?.user.id && (
+            {currUserData?.user_id === postData?.user_id && (
               <div className="flex gap-2">
                 <Link
                   to={`/edit/${postId}`}
