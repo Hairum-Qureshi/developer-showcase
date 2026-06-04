@@ -20,23 +20,27 @@ export default function Navbar() {
         <li className="inline-block mr-4 hover:text-slate-400">
           <Link to="/feed">Feed</Link>
         </li>
-        <li className="inline-block mr-4 hover:text-slate-400">
-          <Link to="/users">All Users</Link>
+        <li className="inline-block mr-4 hover:text-white bg-blue-900 hover:bg-blue-800 active:bg-blue-700 px-3 py-1 rounded-md">
+          <Link to="/">Create Account</Link>
         </li>
-        <li className="inline-block mr-4 hover:text-slate-400">
-          <Link to="/new-post">New Post</Link>
-        </li>
-        <li className="inline-block mr-4 hover:text-slate-400">
-          <Link to={`/profile/${currentUser?.user_id}`}>Profile</Link>
-        </li>
-
         {currentUser && (
-          <li
-            className="inline-block mr-4 hover:text-slate-400 hover:cursor-pointer"
-            onClick={() => signOut()}
-          >
-            Logout
-          </li>
+          <>
+            <li className="inline-block mr-4 hover:text-slate-400">
+              <Link to="/new-post">New Post</Link>
+            </li>
+            <li className="inline-block mr-4 hover:text-slate-400">
+              <Link to="/users">All Users</Link>
+            </li>
+            <li className="inline-block mr-4 hover:text-slate-400">
+              <Link to={`/profile/${currentUser?.user_id}`}>Profile</Link>
+            </li>{" "}
+            <li
+              className="inline-block mr-4 hover:text-slate-400 hover:cursor-pointer"
+              onClick={() => signOut()}
+            >
+              Logout
+            </li>
+          </>
         )}
       </ul>
     </div>
