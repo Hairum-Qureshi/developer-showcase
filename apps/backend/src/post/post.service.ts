@@ -123,4 +123,16 @@ export class PostService {
       .sql`SELECT * FROM posts WHERE user_id = ${userID} ORDER BY created_at DESC`;
     return posts;
   }
+
+  async deletePost(postID: string, userID: string) {
+    const [{ exists: postExists }] = await this
+      .sql`SELECT EXISTS(SELECT 1 FROM posts WHERE post_id=${postID} AND user_id=${userID})`;
+
+    if (!postExists) throw new HttpException('Post not found', 404);
+
+    await this
+      .sql`DELETE FROM posts WHERE post_id=${postID} AND user_id=${userID}`;
+
+    return { message: 'Post deleted successfully' };
+  }
 }
