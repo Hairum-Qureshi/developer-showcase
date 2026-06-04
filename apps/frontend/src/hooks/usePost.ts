@@ -1,10 +1,14 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import { useCurrentUser } from "./useCurrentUser";
 
 export default function usePost() {
   const { userId, postId } = useParams();
   const navigate = useNavigate();
+  const { data: currUserData } = useCurrentUser();
+
+  const queryClient = useQueryClient();
 
   const postMutation = useMutation({
     mutationFn: async ({
@@ -104,5 +108,35 @@ export default function usePost() {
     },
   });
 
-  return { postMutation, allPostsData, postData };
+  const deletePostMutation = useMutation({
+    mutationFn: async (postID: string) => {
+      try {
+        const confirmation = confirm(
+          "Are you sure you want to delete this post? This action cannot be undone.",
+        );
+
+        if (!confirmation) return;
+
+        await axios.delete(
+          `${import.meta.env.VITE_BACKEND_URL}/api/post/${postID}`,
+          {
+            withCredentials: true,
+          },
+        );
+      } catch (error) {
+        console.error("Error deleting post:", (error as AxiosError).response);
+      }
+    },
+    onSuccess: () => {
+      const currUserID = currUserData?.user_id;
+
+      queryClient.invalidateQueries({
+        queryKey: ["posts", currUserID],
+      });
+
+      if (postId) navigate(`/profile/${currUserID}`);
+    },
+  });
+
+  return { postMutation, allPostsData, postData, deletePostMutation };
 }
