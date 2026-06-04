@@ -23,6 +23,10 @@ export class PostService {
   ) {
     const { title, content, projectRepoLink, liveProjectLink, tags } = postData;
 
+    const formattedTags = tags.map((tag: string) =>
+      tag.trim().toLowerCase().replace(/\s+/g, '-'),
+    );
+
     const sanitizedContent = DOMPurify.sanitize(content, {
       FORCE_BODY: true,
     });
@@ -75,7 +79,7 @@ export class PostService {
     }
 
     await this
-      .sql`INSERT INTO posts (post_id, user_id, title, content, project_repo_link, live_project_link, tags, thumbnail_url, slideshow_image_urls) VALUES (${postID}, ${user_id}, ${title}, ${sanitizedContent}, ${projectRepoLink}, ${liveProjectLink}, ${tags}, ${thumbnailURL}, ${slideShowURLs})`;
+      .sql`INSERT INTO posts (post_id, user_id, title, content, project_repo_link, live_project_link, tags, thumbnail_url, slideshow_image_urls) VALUES (${postID}, ${user_id}, ${title}, ${sanitizedContent}, ${projectRepoLink}, ${liveProjectLink}, ${formattedTags}, ${thumbnailURL}, ${slideShowURLs})`;
 
     return { postID };
   }
