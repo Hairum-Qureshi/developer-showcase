@@ -3,6 +3,8 @@ import usePost from "../hooks/usePost";
 import SimpleImageSlider from "react-simple-image-slider";
 import { Link, useParams } from "react-router-dom";
 import { useCurrentUser } from "../hooks/useCurrentUser";
+import { MdOutlineSlideshow } from "react-icons/md";
+import { FaGithub } from "react-icons/fa";
 
 export default function PostContent() {
   const { postData, deletePostMutation } = usePost();
@@ -45,6 +47,7 @@ export default function PostContent() {
                   @{postData?.user.username}
                 </p>
                 <p className="text-sm text-slate-400">
+                  Posted on:{" "}
                   {new Date(postData?.created_at).toLocaleDateString()}
                 </p>
               </div>
@@ -94,39 +97,47 @@ export default function PostContent() {
                 className="w-full h-80 object-cover rounded-xl border border-slate-700"
               />
             ) : (
-              <div className="overflow-hidden rounded-xl">
-                <SimpleImageSlider
-                  width={896}
-                  height={504}
-                  images={postData?.slideshow_image_urls || []}
-                  showBullets={true}
-                  showNavs={true}
-                />
+              <div className="overflow-hidden rounded-xl flex items-center justify-center">
+                {postData?.slideshow_image_urls.length ? (
+                  <SimpleImageSlider
+                    width={896}
+                    height={504}
+                    images={postData?.slideshow_image_urls || []}
+                    showBullets={true}
+                    showNavs={true}
+                  />
+                ) : (
+                  <p className="text-slate-400">Loading...</p>
+                )}
               </div>
             )}
           </div>
         </section>
         <section className="mt-12">
           <h2 className="text-2xl font-bold mb-5">Project Links</h2>
-          <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 shadow-lg flex flex-col sm:flex-row gap-4">
+          <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 shadow-lg flex flex-col gap-6">
             {postData?.project_repo_link && (
-              <a
-                href={postData.project_repo_link}
+              <Link
+                to={postData.project_repo_link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-5 py-3 bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors text-center font-medium"
+                className="flex items-center gap-2 text-slate-300 hover:text-blue-400 font-medium transition-colors group relative py-1"
               >
-                GitHub Repository
-              </a>
+                <FaGithub className="text-lg" />
+                <span>GitHub Repository</span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-400 transition-all group-hover:w-full"></span>
+              </Link>
             )}
             {postData?.live_project_link && (
               <Link
                 to={postData.live_project_link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-5 py-3 bg-emerald-600 hover:bg-emerald-500 rounded-lg transition-colors text-center font-medium"
+                className="flex items-center gap-2 text-slate-300 hover:text-emerald-400 font-medium transition-colors group relative py-1"
               >
-                Live Demo
+                <MdOutlineSlideshow className="text-lg" />
+                <span>Live Demo</span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-emerald-400 transition-all group-hover:w-full"></span>
               </Link>
             )}
           </div>
