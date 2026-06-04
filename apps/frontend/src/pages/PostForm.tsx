@@ -16,6 +16,9 @@ export default function PostForm() {
   const [liveLink, setLiveLink] = useState("");
   const { postMutation } = usePost();
 
+  // ! For some reason there's a weird bug due to the backend DTO restricting users from only adding 1 tag
+  // ! When the user presses the publish button, there needs to be a loading state so the user can't spam the publish button
+
   const onImageChange = (imageList: ImageListType) => {
     setImages(imageList);
   };
@@ -114,7 +117,7 @@ export default function PostForm() {
               </p>
             </div>
             {showRenderedMarkdown ? (
-              <div className="w-full min-h-60 bg-transparent outline-none text-white border border-slate-500 rounded-md p-3 font-mono text-sm max-h-96 overflow-y-scroll prose prose-invert max-w-none">
+              <div className="w-full min-h-60 bg-transparent outline-none text-white border border-slate-500 rounded-md p-3 font-mono text-sm max-h-96 overflow-y-scroll prose prose-invert max-w-none wrap-break-word">
                 <Markdown>{markdownContent}</Markdown>
               </div>
             ) : (
@@ -236,7 +239,7 @@ export default function PostForm() {
           </div>
           <div className="flex justify-end">
             <button
-              className="px-5 py-2 bg-sky-500 text-white rounded-md hover:bg-sky-600"
+              className="px-5 py-2 bg-sky-500 text-white rounded-md hover:bg-sky-600 hover:cursor-pointer"
               onClick={() =>
                 postMutation.mutate({
                   title,
