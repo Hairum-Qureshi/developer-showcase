@@ -49,22 +49,23 @@ export default function PostContent() {
                 </p>
               </div>
             </div>
-            {currUserData && currUserData?.user_id === postData?.user_id && (
-              <div className="flex gap-2">
-                <Link
-                  to={`/edit/${postId}`}
-                  className="px-4 py-0.5 bg-blue-800 hover:cursor-pointer hover:bg-blue-700 text-white rounded-md"
-                >
-                  Edit
-                </Link>
-                <button
-                  className="px-4 py-0.5 hover:cursor-pointer bg-red-600 hover:bg-red-500 text-white rounded-md"
-                  onClick={() => deletePostMutation.mutate(postId as string)}
-                >
-                  Delete
-                </button>
-              </div>
-            )}
+            {currUserData &&
+              currUserData?.user_id === postData?.user.user_id.toString() && (
+                <div className="flex gap-2">
+                  <Link
+                    to={`/edit/${postId}`}
+                    className="px-4 py-0.5 bg-blue-800 hover:cursor-pointer hover:bg-blue-700 text-white rounded-md"
+                  >
+                    Edit
+                  </Link>
+                  <button
+                    className="px-4 py-0.5 hover:cursor-pointer bg-red-600 hover:bg-red-500 text-white rounded-md"
+                    onClick={() => deletePostMutation.mutate(postId as string)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              )}
           </div>
         </div>
         <section className="mt-10 bg-slate-900/60 backdrop-blur-sm border border-slate-800 rounded-2xl p-6 shadow-lg prose prose-invert max-w-none prose-headings:text-white prose-p:text-slate-300 wrap-break-word">
