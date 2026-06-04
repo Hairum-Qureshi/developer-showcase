@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -43,6 +44,15 @@ export class PostController {
   @UseGuards(AuthGuard())
   async getPost(@Param('postID') postID: string) {
     return this.postService.getPostByID(postID);
+  }
+
+  @Delete(':postID')
+  @UseGuards(AuthGuard())
+  async deletePost(
+    @Param('postID') postID: string,
+    @CurrentUser() user: UserPayload,
+  ) {
+    return this.postService.deletePost(postID, user.user_id);
   }
 
   @Get('all/:userID')
