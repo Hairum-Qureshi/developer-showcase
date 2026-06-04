@@ -7,6 +7,9 @@ import Markdown from "react-markdown";
 import useAccount from "../hooks/useAccount";
 import removeMd from "remove-markdown";
 import GitHubAuthButton from "../components/GitHubAuthButton";
+import usePost from "../hooks/usePost";
+import Post from "../components/Post";
+import type { PostType } from "../types";
 
 export default function Profile() {
   const { data: currUserData } = useCurrentUser();
@@ -14,6 +17,7 @@ export default function Profile() {
   const [editMode, setEditMode] = useState(false);
   const [biography, setBiography] = useState(profileData?.biography);
   const { updateBiographyMutation } = useAccount();
+  const { allPostsData } = usePost();
 
   // TODO - make it so that your GitHub username isn't hardcoded and it's dynamic
   // TODO - make it so that the textarea restricts you from going beyond 400 characters with markdown
@@ -22,7 +26,7 @@ export default function Profile() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-slate-950 to-slate-900 max-h-auto">
-      <div className="w-3/4 m-auto p-10 absolute top-20 right-0 left-0 text-slate-50">
+      <div className="w-3/4 m-auto pt-30 pb-10 text-slate-50">
         <div className="flex">
           <div className="w-1/4">
             <img
@@ -75,7 +79,7 @@ export default function Profile() {
           </div>
           <div className="w-3/4">
             <div className="flex w-full">
-              <h2 className="text-xl mb-4 font-mono">about_me.md</h2>
+              <h2 className="text-xl mb-2 font-mono">about_me.md</h2>
               {currUserData?.user_id === profileData?.user_id && (
                 <button
                   className="ml-auto hover:cursor-pointer"
@@ -151,7 +155,24 @@ export default function Profile() {
                 Project Showcase
               </h3>
               <div className="border-t border-sky-800 mb-3" />
-              <div className="mt-4"></div>
+              <div className="mt-4 space-y-3">
+                {!allPostsData?.length ? (
+                  <p className="text-gray-500">No projects to show.</p>
+                ) : (
+                  allPostsData.map((post: PostType) => (
+                    <Post
+                      key={post.post_id}
+                      postID={post.post_id}
+                      thumbnail={post.thumbnail_url}
+                      title={post.title}
+                      description={post.description}
+                      githubLink={post.github_link}
+                      liveDemoLink={post.live_demo_link}
+                      tags={post.tags}
+                    />
+                  ))
+                )}
+              </div>
             </div>
           </div>
         </div>
