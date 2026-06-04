@@ -61,7 +61,7 @@ export default function SignIn({
 
         <button
           type="submit"
-          className="w-full rounded-xl bg-blue-600 px-4 py-3 text-sm font-medium text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          className="w-full rounded-xl bg-blue-600 px-4 py-3 text-sm font-medium text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2  hover:cursor-pointer"
           onClick={(e) => handleSignIn(e, email, password)}
         >
           Sign In
@@ -71,7 +71,7 @@ export default function SignIn({
           Don't have an account?{" "}
           <button
             type="button"
-            className="font-medium text-blue-500 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="font-medium text-blue-500 hover:text-blue-300 hover:cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             onClick={() => {
               setShowSignUp(true);
               setShowSignIn(false);

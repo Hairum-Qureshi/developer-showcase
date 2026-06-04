@@ -90,7 +90,7 @@ export default function SignUp({
         {/* Button */}
         <button
           type="submit"
-          className="w-full rounded-xl bg-blue-600 py-3 font-semibold text-white transition hover:bg-blue-500 active:scale-[0.99]"
+          className="w-full rounded-xl  hover:cursor-pointer  bg-blue-600 py-3 font-semibold text-white transition hover:bg-blue-500 active:scale-[0.99]"
           onClick={(e) =>
             handleSignUp(
               e as unknown as React.FormEvent<HTMLFormElement>,
@@ -108,7 +108,7 @@ export default function SignUp({
         Already have an account?{" "}
         <Link
           to="#"
-          className="font-medium text-blue-400 hover:text-blue-300 hover:cursor-pointer"
+          className="font-medium text-blue-400 hover:text-blue-300  hover:cursor-pointer "
           onClick={() => {
             setShowSignUp(false);
             setShowSignIn(true);
