@@ -3,12 +3,12 @@ export default function UserCard({
   username,
   joinedDate,
 }: {
-  profilePicture?: string;
-  username?: string;
-  joinedDate?: string;
+  profilePicture: string;
+  username: string;
+  joinedDate: string;
 }) {
   return (
-    <div className="bg-slate-900 p-3 rounded-sm">
+    <div className="bg-slate-900 p-3 rounded-sm hover:cursor-pointer hover:bg-slate-800 transition-colors duration-200">
       <div className="flex items-center space-x-3">
         <img
           src={
@@ -19,7 +19,9 @@ export default function UserCard({
         />
         <div className="flex-col">
           <h3>@{username}</h3>
-          <p className="text-sm text-gray-400">Joined: {joinedDate} </p>
+          <p className="text-sm text-gray-400">
+            Joined: {new Date(joinedDate).toLocaleDateString()}{" "}
+          </p>
         </div>
       </div>
     </div>
