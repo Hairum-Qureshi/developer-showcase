@@ -20,9 +20,11 @@ export default function Navbar() {
         <li className="inline-block mr-4 hover:text-slate-400">
           <Link to="/feed">Feed</Link>
         </li>
-        <li className="inline-block mr-4 hover:text-white bg-blue-900 hover:bg-blue-800 active:bg-blue-700 px-3 py-1 rounded-md">
-          <Link to="/">Create Account</Link>
-        </li>
+        {!currentUser && (
+          <li className="inline-block mr-4 hover:text-white bg-blue-900 hover:bg-blue-800 active:bg-blue-700 px-3 py-1 rounded-md">
+            <Link to="/">Create Account</Link>
+          </li>
+        )}
         {currentUser && (
           <>
             <li className="inline-block mr-4 hover:text-slate-400">
