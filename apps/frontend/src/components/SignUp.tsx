@@ -108,7 +108,7 @@ export default function SignUp({
         Already have an account?{" "}
         <Link
           to="#"
-          className="font-medium text-blue-400 hover:text-blue-300"
+          className="font-medium text-blue-400 hover:text-blue-300 hover:cursor-pointer"
           onClick={() => {
             setShowSignUp(false);
             setShowSignIn(true);
