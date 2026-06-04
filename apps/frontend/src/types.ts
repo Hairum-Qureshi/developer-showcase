@@ -9,4 +9,12 @@ type PostType = {
   created_at: string;
 };
 
-export type { PostType };
+type UserType = {
+  user_id: string;
+  username: string;
+  avatar: string | null;
+  profile_picture_seed: string;
+  created_at: string;
+};
+
+export type { PostType, UserType };
