@@ -50,7 +50,7 @@ export class ProfileService {
 
   async getAllUsers() {
     const users = await this
-      .sql`SELECT user_id, username, profile_picture_seed, avatar FROM users`;
+      .sql`SELECT user_id, username, profile_picture_seed, avatar, created_at FROM users`;
     return users;
   }
 }
