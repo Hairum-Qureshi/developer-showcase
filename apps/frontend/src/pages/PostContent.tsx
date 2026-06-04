@@ -53,7 +53,7 @@ export default function PostContent() {
               currUserData?.user_id === postData?.user.user_id.toString() && (
                 <div className="flex gap-2">
                   <Link
-                    to={`/edit/${postId}`}
+                    to={`/post/${postId}/edit`}
                     className="px-4 py-0.5 bg-blue-800 hover:cursor-pointer hover:bg-blue-700 text-white rounded-md"
                   >
                     Edit
