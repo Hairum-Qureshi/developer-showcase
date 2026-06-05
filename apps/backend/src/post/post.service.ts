@@ -168,4 +168,29 @@ export class PostService {
 
     return { message: 'Post deleted successfully' };
   }
+
+  async createStatusPost(content: string, userID: string) {
+    if (!content.trim().length) {
+      throw new HttpException('Status content cannot be empty', 400);
+    }
+
+    if (content.length > 280) {
+      throw new HttpException(
+        'Status content cannot exceed 280 characters',
+        400,
+      );
+    }
+
+    const snowflake = new SnowflakeId({
+      mid: 42,
+      offset: (2019 - 1970) * 31536000 * 1000,
+    });
+
+    const postID = snowflake.generate();
+
+    await this
+      .sql`INSERT INTO posts (post_id, user_id, title, content) VALUES (${postID}, ${userID}, 'STATUS POST', ${content})`;
+
+    return { postID };
+  }
 }
