@@ -43,9 +43,17 @@ export default function PostContent() {
                 className="w-12 h-12 rounded-full border-2 border-slate-700"
               />
               <div>
-                <p className="font-medium text-slate-200">
-                  @{postData?.user.username}
-                </p>
+                {currUserData ? (
+                  <Link to={`/profile/${postData?.user.user_id}`}>
+                    <p className="font-medium text-slate-200 hover:underline">
+                      @{postData?.user.username}
+                    </p>
+                  </Link>
+                ) : (
+                  <p className="font-medium text-slate-200">
+                    @{postData?.user.username}
+                  </p>
+                )}
                 <p className="text-sm text-slate-400">
                   Posted on:{" "}
                   {new Date(postData?.created_at).toLocaleDateString()}
