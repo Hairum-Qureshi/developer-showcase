@@ -99,19 +99,32 @@ export default function Feed() {
                 Featured Users
               </h3>
               <div className="p-3 flex flex-col gap-3">
-                {users.length ? (
-                  users.map((user: UserType) => (
-                    <UserCard
-                      key={user.username}
-                      username={user.username}
-                      profilePicture={
-                        user.avatar
-                          ? user.avatar
-                          : `https://api.dicebear.com/9.x/identicon/svg?seed=${user.profile_picture_seed}`
-                      }
-                      joinedDate={"Joined Jan 2024"}
-                    />
-                  ))
+                {users?.length ? (
+                  users.map((user: UserType) =>
+                    currentUser ? (
+                      <Link to={`/profile/${user.user_id}`}>
+                        <UserCard
+                          username={user.username}
+                          profilePicture={
+                            user.avatar
+                              ? user.avatar
+                              : `https://api.dicebear.com/9.x/identicon/svg?seed=${user.profile_picture_seed}`
+                          }
+                          joinedDate={"Joined Jan 2024"}
+                        />
+                      </Link>
+                    ) : (
+                      <UserCard
+                        username={user.username}
+                        profilePicture={
+                          user.avatar
+                            ? user.avatar
+                            : `https://api.dicebear.com/9.x/identicon/svg?seed=${user.profile_picture_seed}`
+                        }
+                        joinedDate={"Joined Jan 2024"}
+                      />
+                    ),
+                  )
                 ) : (
                   <p className="text-gray-500 text-center">No users to show.</p>
                 )}
