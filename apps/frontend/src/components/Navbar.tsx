@@ -8,7 +8,7 @@ export default function Navbar() {
   return (
     <div className="w-full p-4 text-slate-50 flex items-center justify-between bg-transparent absolute top-0 left-0 z-10">
       {currentUser ? (
-        <Link to="/feed">
+        <Link to="/">
           <h1 className="text-2xl font-bold">Developer Showcase</h1>
         </Link>
       ) : (
@@ -20,9 +20,12 @@ export default function Navbar() {
         <li className="inline-block mr-4 hover:text-slate-400">
           <Link to="/feed">Feed</Link>
         </li>
+        <li className="inline-block mr-4 hover:text-slate-400">
+          <Link to="/tags">Tags</Link>
+        </li>
         {!currentUser && (
           <li className="inline-block mr-4 hover:text-white bg-blue-900 hover:bg-blue-800 active:bg-blue-700 px-3 py-1 rounded-md">
-            <Link to="/">Create Account</Link>
+            <Link to="/auth">Create Account</Link>
           </li>
         )}
         {currentUser && (
@@ -35,7 +38,7 @@ export default function Navbar() {
             </li>
             <li className="inline-block mr-4 hover:text-slate-400">
               <Link to={`/profile/${currentUser?.user_id}`}>Profile</Link>
-            </li>{" "}
+            </li>
             <li
               className="inline-block mr-4 hover:text-slate-400 hover:cursor-pointer"
               onClick={() => signOut()}
