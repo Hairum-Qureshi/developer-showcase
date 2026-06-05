@@ -23,12 +23,19 @@ export default function useAuthForm() {
           username: username.toLowerCase().trim(),
           password: password.trim(),
         },
+        {
+          withCredentials: true,
+        },
       );
 
       return data;
     },
     onError: (error) => {
       console.error("Error during sign-up:", error);
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["currentUser"] });
+      navigate(`/profile/${data.user_id}`);
     },
   });
 
@@ -57,6 +64,7 @@ export default function useAuthForm() {
       console.error("Error during sign-in:", error);
     },
     onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["currentUser"] });
       navigate(`/profile/${data.user_id}`);
     },
   });
