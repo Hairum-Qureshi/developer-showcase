@@ -10,7 +10,7 @@ export default function ProtectedRoutesGuard({
   const { data: userData, isPending } = useCurrentUser();
 
   if (!userData && !isPending) {
-    return <Navigate to="/" />;
+    return <Navigate to="/auth" />;
   }
 
   return <>{children}</>;
