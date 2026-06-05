@@ -9,12 +9,14 @@ import AllUsers from "../pages/AllUsers";
 import NavbarLayout from "./NavbarLayout";
 import "../css/index.css";
 import ProtectedRoutesGuard from "./ProtectedRoutesGuard";
+import Auth from "../pages/Auth";
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route element={<NavbarLayout />}>
+          <Route path="/" element={<Home />} />
           <Route
             path="/new-post"
             element={
@@ -43,12 +45,12 @@ export default function App() {
           <Route path="/feed" element={<Feed />} />
           <Route path="*" element={<NotFound />} />
         </Route>
-        <Route path="/" element={<Home />} />
+        <Route path="/auth" element={<Auth />} />
         <Route
           path="/login/callback"
           element={
             <ProtectedRoutesGuard>
-              <Home />
+              <Auth />
             </ProtectedRoutesGuard>
           }
         />
