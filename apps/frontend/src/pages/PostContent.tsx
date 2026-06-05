@@ -124,7 +124,7 @@ export default function PostContent() {
         <section className="mt-12">
           <h2 className="text-2xl font-bold mb-5">Project Links</h2>
           <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 shadow-lg flex flex-col gap-6">
-            {postData?.project_repo_link && (
+            {postData?.project_repo_link ? (
               <Link
                 to={postData.project_repo_link}
                 target="_blank"
@@ -135,8 +135,10 @@ export default function PostContent() {
                 <span>GitHub Repository</span>
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-400 transition-all group-hover:w-full"></span>
               </Link>
+            ) : (
+              <p className="text-slate-500">No repository link provided.</p>
             )}
-            {postData?.live_project_link && (
+            {postData?.live_project_link ? (
               <Link
                 to={postData.live_project_link}
                 target="_blank"
@@ -147,6 +149,8 @@ export default function PostContent() {
                 <span>Live Demo</span>
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-emerald-400 transition-all group-hover:w-full"></span>
               </Link>
+            ) : (
+              <p className="text-slate-500">No live demo link provided.</p>
             )}
           </div>
         </section>
