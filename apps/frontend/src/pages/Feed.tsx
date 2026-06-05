@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useCurrentUser } from "../hooks/useCurrentUser";
 import { IoIosInformationCircleOutline } from "react-icons/io";
 
@@ -49,7 +50,14 @@ export default function Feed() {
                           This textbox is for sharing project ideas, feedback,
                           and finding collaborators. Please do not ask for help
                           with specific coding problems. For showing off your
-                          projects, please use the "Create Post" feature.
+                          projects, please use the{" "}
+                          <Link
+                            to="/new-post"
+                            className="text-sky-600 hover:text-slate-400 underline"
+                          >
+                            New Post
+                          </Link>{" "}
+                          feature.
                         </span>
                       </div>
                       <button
@@ -63,6 +71,9 @@ export default function Feed() {
                 </div>
               </div>
             )}
+            <div className="mt-3 border border-sky-950 rounded-md p-3 w-full">
+              Posts go here...
+            </div>
           </div>
           <div className="w-1/4 border border-sky-950 rounded-md">
             <h3 className="p-2 text-lg font-semibold text-center border-b border-sky-950 bg-slate-900">
