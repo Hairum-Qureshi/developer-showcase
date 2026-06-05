@@ -1,15 +1,18 @@
 import { Link } from "react-router-dom";
 import { useCurrentUser } from "../hooks/useCurrentUser";
 import { IoIosInformationCircleOutline } from "react-icons/io";
+import UserCard from "../components/UserCard";
+import useUsers from "../hooks/useUsers";
+import type { UserType } from "../types";
 
 export default function Feed() {
   const { data: currentUser } = useCurrentUser();
+  const { users } = useUsers();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-slate-950 to-slate-900 max-h-auto">
-      <div className="w-3/4 m-auto p-10 absolute top-10 right-0 left-0 text-slate-50 mt-5">
-        <div className="w-full border border-sky-900 mb-10 p-3 bg-slate-950 rounded-md justify-between flex items-center">
-          {/* searchbar */}
+      <div className="w-3/4 m-auto p-10 text-slate-50">
+        <div className="w-full my-20 border border-sky-900 mb-10 p-3 bg-slate-950 rounded-md justify-between flex items-center">
           <input
             type="text"
             placeholder="Search posts..."
@@ -71,7 +74,9 @@ export default function Feed() {
                 </div>
               </div>
             )}
-            <div className="mt-3 border border-sky-950 rounded-md p-3 w-full">
+            <div
+              className={`${!currentUser ? "" : "mt-3"} border border-sky-950 rounded-md p-3 w-full`}
+            >
               Posts go here...
             </div>
           </div>
@@ -79,6 +84,39 @@ export default function Feed() {
             <h3 className="p-2 text-lg font-semibold text-center border-b border-sky-950 bg-slate-900">
               Popular Tags
             </h3>
+            <div className="p-3 flex flex-wrap gap-2">
+              {["react", "javascript", "webdev", "python"].map((tag) => (
+                <span
+                  key={tag}
+                  className="px-3 py-1 rounded-full bg-slate-800 text-slate-300 text-sm border border-slate-700 hover:bg-slate-700 hover:text-white cursor-pointer transition-colors"
+                >
+                  #{tag}
+                </span>
+              ))}
+            </div>
+            <div className="border-t border-sky-950">
+              <h3 className="p-2 text-lg font-semibold text-center border-b border-sky-950 bg-slate-900">
+                Featured Users
+              </h3>
+              <div className="p-3 flex flex-col gap-3">
+                {users.length ? (
+                  users.map((user: UserType) => (
+                    <UserCard
+                      key={user.username}
+                      username={user.username}
+                      profilePicture={
+                        user.avatar
+                          ? user.avatar
+                          : `https://api.dicebear.com/9.x/identicon/svg?seed=${user.profile_picture_seed}`
+                      }
+                      joinedDate={"Joined Jan 2024"}
+                    />
+                  ))
+                ) : (
+                  <p className="text-gray-500 text-center">No users to show.</p>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>
