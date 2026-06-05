@@ -46,14 +46,7 @@ export default function App() {
           <Route path="*" element={<NotFound />} />
         </Route>
         <Route path="/auth" element={<Auth />} />
-        <Route
-          path="/login/callback"
-          element={
-            <ProtectedRoutesGuard>
-              <Auth />
-            </ProtectedRoutesGuard>
-          }
-        />
+        <Route path="/login/callback" element={<Auth />} />
       </Routes>
     </BrowserRouter>
   );
