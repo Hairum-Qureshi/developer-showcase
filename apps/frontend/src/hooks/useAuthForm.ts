@@ -129,7 +129,7 @@ export default function useAuthForm() {
     },
     onSuccess: () => {
       queryClient.setQueryData(["currentUser"], null);
-      navigate("/");
+      navigate("/auth");
     },
     onError: (error) => {
       console.error("Error during sign-out:", error);
