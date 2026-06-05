@@ -1,39 +1,49 @@
-**NestJS + React + Vite + Tailwind + Turbo Template**
+# Developer Showcase
 
-This repository is a **full-stack monorepo template** using **npm workspaces** and **Turborepo** to manage a React frontend and a NestJS backend in a single repository.
+A full-stack web application where developers can showcase projects, seek feedback, recruit collaborators, and connect with other builders.
 
-The goal of this template is to provide:
+This project was primarily created as a learning exercise for PostgreSQL and SQL database design. Rather than using an ORM such as Prisma or TypeORM, the backend interacts with PostgreSQL using raw SQL queries to provide a deeper understanding of relational databases, query construction, and schema design.
 
-- A minimal but correct monorepo setup
-- Clear separation of frontend and backend concerns
-- Centralized dependency management
-- Coordinated development scripts without over-engineering
+This repository uses a monorepo architecture powered by npm workspaces and Turborepo, containing both the React frontend and NestJS backend in a single codebase.
 
-This is a **template**, not a production-ready system.
+---
+
+## Features
+
+- Email/password authentication
+- GitHub OAuth authentication
+- JWT-based authentication and authorization
+- Project showcase platform
+- Developer recruitment posts
+- Project feedback and advice requests
+- PostgreSQL database integration using raw SQL
+- Image uploads via Uploadcare
+- Responsive UI built with Tailwind CSS
+- Monorepo architecture using Turborepo
 
 ---
 
 ## Repository Structure
 
-```
+```text
 .
 ├── apps/
-│   ├── backend/          # NestJS backend application
-│   └── frontend/         # React + Vite + Tailwind frontend
-├── packages/             # Optional shared packages (empty by default)
-├── package.json          # Root workspace + Turbo configuration
-├── package-lock.json     # Single lockfile for the entire monorepo
-├── turbo.json            # Turbo task pipeline
+│   ├── backend/          # NestJS API server
+│   └── frontend/         # React application
+├── packages/             # Shared packages (optional)
+├── package.json
+├── package-lock.json
+├── turbo.json
 └── README.md
 ```
 
 ### Key Structural Notes
 
-- This **is a monorepo**
-- Dependency management is centralized at the **root**
-- Each app remains a **standalone project**
-- No code is shared by default
-- Shared packages are optional, not assumed
+- This is a monorepo managed with npm workspaces
+- Frontend and backend live in the same repository
+- Dependency management is centralized at the root
+- PostgreSQL is used as the primary database
+- No ORM is used; all database interactions are written in SQL
 
 ---
 
@@ -43,67 +53,214 @@ This is a **template**, not a production-ready system.
 
 - NestJS
 - TypeScript
-- Basic “Hello World” API
+- PostgreSQL
+- Raw SQL
+- JWT Authentication
+- GitHub OAuth
+- Uploadcare
 
 ### Frontend (`apps/frontend`)
 
 - React
 - Vite
-- TailwindCSS
 - TypeScript
+- Tailwind CSS
 
 ### Tooling
 
-- npm workspaces (monorepo management)
-- Turborepo (task orchestration and caching)
+- npm Workspaces
+- Turborepo
+
+---
+
+## Why Raw SQL?
+
+The primary goal of this project was to gain a deeper understanding of PostgreSQL and relational databases.
+
+Instead of relying on an ORM, all database interactions are implemented using SQL queries directly. This approach provides experience with:
+
+- Database schema design
+- SQL joins and relationships
+- Query optimization
+- Data integrity constraints
+- PostgreSQL-specific features
+- Writing and maintaining production-style SQL
 
 ---
 
 ## Prerequisites
 
-You need:
+You will need:
 
 - Node.js (LTS recommended)
-- npm (v7+ required for workspaces)
+- npm v7+
+- A PostgreSQL database
 
 ---
 
 ## Installation
 
-From the **repository root**:
+Clone the repository and install dependencies from the repository root:
 
 ```bash
 npm install
 ```
 
-This installs dependencies for **all workspace packages** and generates a **single `package-lock.json`**.
+This installs dependencies for all workspace packages and generates a single lockfile.
 
-Do not run `npm install` inside individual apps.
+Do not run `npm install` inside individual applications.
 
 ---
 
-## Configure ENV Variables:
-Create a .env file in the `apps/backend` directory and add the following:
+## Backend Environment Variables
 
-```
-PORT=3000
+Create a `.env` file inside `apps/backend`.
+
+```env
 FRONTEND_URL=http://localhost:5173
+PORT=3000
+
+NEON_DB_URL=your_database_connection_string
+
+NODE_ENV=development
+
+JWT_SECRET=your_jwt_secret
+JWT_EXPIRES=604800000
+
+GITHUB_CLIENT_ID=your_github_client_id
+GITHUB_CLIENT_SECRET=your_github_client_secret
+
+UPLOADCARE_PUBLIC_KEY=your_uploadcare_public_key
+UPLOADCARE_SECRET_KEY=your_uploadcare_secret_key
 ```
 
-Variable Descriptions:
+### Variable Descriptions
 
-`PORT`
-The port on which the backend server will run.
-
-`FRONTEND_URL`
-The URL of the frontend application.
-Used for CORS configuration and client–server communication during development.
+| Variable              | Description                              |
+| --------------------- | ---------------------------------------- |
+| FRONTEND_URL          | Frontend URL used for CORS configuration |
+| PORT                  | Backend server port                      |
+| NEON_DB_URL           | PostgreSQL connection string             |
+| NODE_ENV              | Runtime environment                      |
+| JWT_SECRET            | Secret used to sign JWT tokens           |
+| JWT_EXPIRES           | JWT expiration time in milliseconds      |
+| GITHUB_CLIENT_ID      | GitHub OAuth application client ID       |
+| GITHUB_CLIENT_SECRET  | GitHub OAuth application client secret   |
+| UPLOADCARE_PUBLIC_KEY | Uploadcare public API key                |
+| UPLOADCARE_SECRET_KEY | Uploadcare secret API key                |
 
 ---
 
-## Development
+## Frontend Environment Variables
 
-Run all development servers concurrently:
+Create a `.env` file inside `apps/frontend`.
+
+```env
+VITE_BACKEND_URL=http://localhost:3000
+VITE_GITHUB_CLIENT_ID=your_github_client_id
+```
+
+### Variable Descriptions
+
+| Variable              | Description            |
+| --------------------- | ---------------------- |
+| VITE_BACKEND_URL      | Backend API URL        |
+| VITE_GITHUB_CLIENT_ID | GitHub OAuth client ID |
+
+---
+
+## Third-Party Service Setup
+
+### Neon Database
+
+This project uses PostgreSQL hosted through Neon.
+
+1. Create an account at Neon.
+2. Create a new project.
+3. Create a database if one is not automatically generated.
+4. Open the Dashboard and locate your connection string.
+5. Copy the PostgreSQL connection string into:
+
+```env
+NEON_DB_URL=your_connection_string
+```
+
+---
+
+### GitHub OAuth
+
+GitHub OAuth is required if you want to enable GitHub sign-in.
+
+#### Create an OAuth Application
+
+1. Sign in to GitHub.
+2. Navigate to:
+
+```text
+Settings → Developer Settings → OAuth Apps
+```
+
+3. Click **New OAuth App**.
+4. Configure:
+
+**Application Name**
+
+```text
+Developer Showcase
+```
+
+**Homepage URL**
+
+```text
+http://localhost:5173
+```
+
+**Authorization Callback URL**
+
+```text
+http://localhost:3000/auth/github/callback
+```
+
+5. Create the application.
+6. Copy the Client ID.
+7. Generate a Client Secret.
+
+Add both values to the backend environment file:
+
+```env
+GITHUB_CLIENT_ID=your_client_id
+GITHUB_CLIENT_SECRET=your_client_secret
+```
+
+And add the Client ID to the frontend:
+
+```env
+VITE_GITHUB_CLIENT_ID=your_client_id
+```
+
+---
+
+### Uploadcare
+
+Uploadcare is used for storing project screenshots and uploaded images.
+
+1. Create an Uploadcare account.
+2. Create a new project.
+3. Open the project dashboard.
+4. Locate your API keys.
+
+Add them to your backend environment file:
+
+```env
+UPLOADCARE_PUBLIC_KEY=your_public_key
+UPLOADCARE_SECRET_KEY=your_secret_key
+```
+
+---
+
+## Running the Application
+
+Start all development servers from the repository root:
 
 ```bash
 npm run dev
@@ -111,75 +268,68 @@ npm run dev
 
 This command:
 
-- Uses Turbo to run the `dev` script in each app
 - Starts the NestJS backend
-- Starts the Vite frontend
-- Streams logs with app prefixes
+- Starts the React frontend
+- Runs both applications concurrently through Turborepo
+- Streams logs from each application
 
-### Default Ports
+### Default Development URLs
 
-- Backend: `http://localhost:3000`
-- Frontend: `http://localhost:5173`
+Frontend:
 
----
-
-## Building the Project
-
-To build all apps:
-
-```bash
-npm run build
+```text
+http://localhost:5173
 ```
 
-Turbo will:
+Backend:
 
-- Run builds in the correct order
-- Cache outputs for faster rebuilds
-- Skip unchanged packages when possible
-
----
-
-## Linting
-
-To lint all packages:
-
-```bash
-npm run lint
+```text
+http://localhost:3000
 ```
 
-Each app is responsible for defining its own lint configuration.
+---
+
+## Authentication
+
+Users can authenticate using either:
+
+- Email and password
+- GitHub OAuth
+
+Authenticated sessions are managed using JWTs.
 
 ---
 
-## App Independence
+## File Uploads
 
-Even though this is a monorepo:
+Project images are uploaded and managed through Uploadcare.
 
-- Frontend and backend **do not depend on each other**
-- They can be deployed independently
-- They can be developed in isolation
-- No API client or shared types are included by default
-
-If you want frontend ↔ backend communication, you must:
-
-- Configure CORS in the backend
-- Add environment variables in the frontend
-- Implement API calls manually
-
-This is intentional.
+This allows users to attach screenshots and other project-related media without storing files directly on the application server.
 
 ---
 
-## Turbo Configuration
+## Project Purpose
 
-Turbo is configured via `turbo.json` and operates on **script names**, not commands.
+This project serves two primary purposes:
 
-If an app does not define a script (e.g. `dev`, `build`, `lint`), Turbo will skip it.
+### Community Platform
 
-Turbo is used only for:
+Developers can:
 
-- Task orchestration
-- Caching
-- Parallel execution
+- Showcase personal projects
+- Request feedback
+- Seek technical advice
+- Recruit collaborators
+- Discover projects built by other developers
 
-It does not manage dependencies or enforce architecture.
+### Learning PostgreSQL
+
+The application was intentionally built without an ORM to provide hands-on experience with:
+
+- PostgreSQL
+- SQL query writing
+- Database design
+- Relational data modeling
+- Authentication systems
+- Full-stack application architecture
+- Managing application data using raw SQL
