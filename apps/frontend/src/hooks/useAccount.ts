@@ -27,6 +27,7 @@ export default function useAccount() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["currentUser"] });
+      queryClient.invalidateQueries({ queryKey: ["profileData", userId] });
     },
     onError: (error) => {
       console.error("Error during biography update:", error);
