@@ -26,9 +26,7 @@ export default function PostForm() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-slate-950 to-slate-900">
       <div className="w-2/3 mx-auto p-15 text-slate-50 space-y-5">
-        <h1 className="text-3xl font-mono font-semibold my-10">
-          Create a New Post
-        </h1>
+        <h1 className="text-3xl font-semibold my-10">Create a New Post</h1>
 
         {/* Thumbnail Section */}
         <div>
