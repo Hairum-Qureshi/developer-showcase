@@ -181,17 +181,19 @@ export default function Profile() {
                 )}
               </div>
             </div>
-            <div className="border border-red-800 rounded-md p-3 mt-5 bg-red-950/50">
-              <h3 className="text-red-500">Danger Zone</h3>
-              <p className="text-red-400 text-sm mt-2">
-                Deleting your account is irreversible. All your data, including
-                your profile, posts, and comments, will be permanently removed.
-                Please proceed with caution.
-              </p>
-              <button className="mt-3 px-4 py-2 bg-red-800 text-white rounded-md hover:bg-red-600 hover:cursor-pointer transition-colors">
-                Delete Account
-              </button>
-            </div>
+            {currUserData?.user_id === profileData?.user_id && (
+              <div className="border border-red-800 rounded-md p-3 mt-5 bg-red-950/50">
+                <h3 className="text-red-500">Danger Zone</h3>
+                <p className="text-red-400 text-sm mt-2">
+                  Deleting your account is irreversible. All your data,
+                  including your profile, posts, and comments, will be
+                  permanently removed. Please proceed with caution.
+                </p>
+                <button className="mt-3 px-4 py-2 bg-red-800 text-white rounded-md hover:bg-red-600 hover:cursor-pointer transition-colors">
+                  Delete Account
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
