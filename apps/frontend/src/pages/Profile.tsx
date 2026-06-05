@@ -151,6 +151,13 @@ export default function Profile() {
               </div>
             </div>
             <div className="my-10">
+              <h3 className="text-xl font-bold font-mono mb-2">Feed Posts</h3>
+              <div className="border-t border-sky-800 mb-3" />
+              <div className="mt-4 space-y-3">
+                <p className="text-gray-500">Posts will be displayed here...</p>
+              </div>
+            </div>
+            <div className="my-10">
               <h3 className="text-xl font-bold font-mono mb-2">
                 Project Showcase
               </h3>
