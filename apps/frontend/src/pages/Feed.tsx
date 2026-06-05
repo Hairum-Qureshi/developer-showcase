@@ -32,6 +32,9 @@ export default function Feed() {
           <div className="w-3/4">
             {currentUser && (
               <div className="flex flex-col">
+                <h3 className="font-mono text-white text-2xl font-semibold mb-5">
+                  What're you programming today, @{currentUser?.username}?
+                </h3>
                 <div className="flex space-x-3">
                   <img
                     src={currentUser.profilePicture}
@@ -40,7 +43,7 @@ export default function Feed() {
                   />
                   <div className="flex-1 border border-sky-950 rounded-md overflow-hidden bg-slate-950">
                     <textarea
-                      placeholder={`What's on your mind, @${currentUser?.username}? Share your project ideas, ask for feedback, or find collaborators!`}
+                      placeholder={`Share your project ideas, ask for feedback, or find collaborators!`}
                       className="w-full h-28 p-3 bg-transparent text-slate-50 focus:outline-none resize-none"
                       data-gramm="false"
                       data-gramm_editor="false"
