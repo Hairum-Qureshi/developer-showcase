@@ -54,6 +54,15 @@ export class PostController {
     return this.postService.deletePost(postID, user.user_id);
   }
 
+  @Post('new/status')
+  @UseGuards(AuthGuard())
+  async updatePostStatus(
+    @Body('content') content: string,
+    @CurrentUser() user: UserPayload,
+  ) {
+    return this.postService.createStatusPost(content, user.user_id);
+  }
+
   @Get('all/:userID')
   @UseGuards(AuthGuard())
   async getAllPostsByUserID(@Param('userID') userID: string) {
