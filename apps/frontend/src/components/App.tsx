@@ -10,6 +10,7 @@ import NavbarLayout from "./NavbarLayout";
 import "../css/index.css";
 import ProtectedRoutesGuard from "./ProtectedRoutesGuard";
 import Auth from "../pages/Auth";
+import PostedTags from "../pages/PostedTags";
 
 export default function App() {
   return (
@@ -43,6 +44,7 @@ export default function App() {
             }
           />
           <Route path="/feed" element={<Feed />} />
+          <Route path="/tags" element={<PostedTags />} />
           <Route path="*" element={<NotFound />} />
         </Route>
         <Route path="/auth" element={<Auth />} />
