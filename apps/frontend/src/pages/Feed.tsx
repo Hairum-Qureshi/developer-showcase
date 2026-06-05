@@ -53,7 +53,7 @@ export default function Feed() {
                           projects, please use the{" "}
                           <Link
                             to="/new-post"
-                            className="text-sky-600 hover:text-slate-400 underline"
+                            className="text-sky-600 hover:text-sky-400 underline"
                           >
                             New Post
                           </Link>{" "}
