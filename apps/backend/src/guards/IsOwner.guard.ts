@@ -14,9 +14,9 @@ export class IsOwnerGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const userID = request.user.user_id;
-    const postId = request.params.id;
+    const postId = request.params.postID;
 
-    const post = await this
+    const [post] = await this
       .sql`SELECT user_id FROM posts WHERE post_id = ${postId} AND user_id = ${userID}`;
 
     if (!post) throw new NotFoundException('Post not found');
