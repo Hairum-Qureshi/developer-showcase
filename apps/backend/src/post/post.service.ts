@@ -98,7 +98,7 @@ export class PostService {
 
     const [post] = await this.sql`
       SELECT
-        posts.post_id,
+        posts.post_id::text,
         posts.thumbnail_url,
         posts.title,
         posts.content,
@@ -109,7 +109,7 @@ export class PostService {
         posts.created_at,
 
         json_build_object(
-          'user_id', users.user_id,
+          'user_id', users.user_id::text,
           'username', users.username,
           'profile_picture_seed', users.profile_picture_seed,
           'avatar', users.avatar 
@@ -192,5 +192,30 @@ export class PostService {
       .sql`INSERT INTO posts (post_id, user_id, title, content) VALUES (${postID}, ${userID}, 'STATUS POST', ${content})`;
 
     return { postID };
+  }
+
+  async getAllPosts() {
+    const posts = await this.sql`
+      SELECT
+        posts.post_id::text,
+        posts.thumbnail_url,
+        posts.title,
+        posts.content,
+        posts.tags,
+        posts.created_at,
+
+        json_build_object(
+          'user_id', users.user_id::text,
+          'username', users.username,
+          'profile_picture_seed', users.profile_picture_seed,
+          'avatar', users.avatar 
+        ) AS user
+
+        FROM posts
+        JOIN users
+          ON posts.user_id = users.user_id
+      `;
+
+    return posts;
   }
 }
