@@ -11,6 +11,7 @@ import "../css/index.css";
 import ProtectedRoutesGuard from "./ProtectedRoutesGuard";
 import Auth from "../pages/Auth";
 import PostedTags from "../pages/PostedTags";
+import PostOwnerGuard from "./PostOwnerGuard";
 
 export default function App() {
   return (
@@ -39,7 +40,9 @@ export default function App() {
             path="/post/:postId/edit"
             element={
               <ProtectedRoutesGuard>
-                <PostForm />
+                <PostOwnerGuard>
+                  <PostForm />
+                </PostOwnerGuard>
               </ProtectedRoutesGuard>
             }
           />
