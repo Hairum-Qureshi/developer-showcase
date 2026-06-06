@@ -64,7 +64,7 @@ export default function useAuthForm() {
       console.error("Error during sign-in:", error);
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["currentUser"] });
+      queryClient.setQueryData(["currentUser"], data);
       navigate(`/profile/${data.user_id}`);
     },
   });
