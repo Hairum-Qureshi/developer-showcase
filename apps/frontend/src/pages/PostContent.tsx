@@ -38,9 +38,13 @@ export default function PostContent() {
           <div className="flex flex-col items-start md:items-end gap-3 shrink-0">
             <div className="flex items-center gap-3">
               <img
-                src={postData?.user.avatar}
+                src={
+                  postData?.user.avatar
+                    ? postData.user.avatar
+                    : `https://api.dicebear.com/9.x/identicon/svg?seed=${postData?.user.profile_picture_seed}`
+                }
                 alt="User Avatar"
-                className="w-12 h-12 rounded-full border-2 border-slate-700"
+                className="w-12 h-12 rounded-md border-2 border-slate-700"
               />
               <div>
                 {currUserData ? (
