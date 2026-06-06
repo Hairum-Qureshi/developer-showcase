@@ -261,19 +261,25 @@ export default function PostForm() {
           <div className="flex justify-end">
             {isEditForm ? (
               <button
-                className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 transition-colors"
-                onClick={() => {
-                  // Handle post update logic here
-                }}
+                className="px-5 py-2 bg-sky-500 text-white rounded-md hover:bg-sky-600 hover:cursor-pointer"
+                onClick={}
               >
                 Update Post
               </button>
             ) : (
               <button
-                className="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600 transition-colors"
-                onClick={() => {
-                  // Handle post creation logic here
-                }}
+                className="px-5 py-2 bg-sky-500 text-white rounded-md hover:bg-sky-600 hover:cursor-pointer"
+                onClick={() =>
+                  postMutation.mutate({
+                    title,
+                    markdownDescription: markdownContent,
+                    tags,
+                    projectLink,
+                    liveLink,
+                    thumbnail: thumbnail[0]?.file as File,
+                    slideShowImages: images.map((img) => img.file) as File[],
+                  })
+                }
               >
                 Publish
               </button>
