@@ -27,21 +27,23 @@ export default function Profile() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-slate-950 to-slate-900 max-h-auto">
       <div className="w-3/4 m-auto pt-30 pb-10 text-slate-50">
-        <div className="flex">
-          <div className="w-1/4">
+        <div className="lg:flex">
+          <div className="w-full mb-5 lg:mb-0 lg:w-1/4 flex lg:flex-col space-x-5 lg:space-x-0">
             <img
               src={profileData?.profilePicture}
               alt="Profile Picture"
               className="w-32 h-32 rounded-md border border-sky-800 mb-4"
             />
-            <h1 className="text-2xl font-bold mb-2">{profileData?.username}</h1>
-            {currUserData?.user_id === profileData?.user_id && (
-              <p className="text-gray-400 mb-4">{profileData?.email}</p>
-            )}
-            <p className="text-gray-400 mb-4">
-              Joined: {new Date(profileData?.createdAt).toLocaleDateString()}
-            </p>
             <div>
+              <h1 className="text-2xl font-bold mb-2">
+                {profileData?.username}
+              </h1>
+              {currUserData?.user_id === profileData?.user_id && (
+                <p className="text-gray-400 mb-4">{profileData?.email}</p>
+              )}
+              <p className="text-gray-400 mb-4">
+                Joined: {new Date(profileData?.createdAt).toLocaleDateString()}
+              </p>
               <h3>Social Medias:</h3>
               <ul className="list-disc list-inside text-gray-300">
                 <li>
@@ -77,7 +79,7 @@ export default function Profile() {
               </ul>
             </div>
           </div>
-          <div className="w-3/4">
+          <div className="w-full lg:w-3/4">
             <div className="flex w-full">
               <h2 className="text-xl mb-2 font-mono">about_me.md</h2>
               {currUserData?.user_id === profileData?.user_id && (
