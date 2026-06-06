@@ -15,6 +15,7 @@ import { PostDto } from '../DTOs/post.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { CurrentUser } from '../decorators/currentUser.decorator';
 import type { UserPayload } from '../types';
+import { IsOwnerGuard } from '../guards/IsOwner.guard';
 
 @Controller('post')
 export class PostController {
@@ -46,7 +47,7 @@ export class PostController {
   }
 
   @Delete(':postID')
-  @UseGuards(AuthGuard())
+  @UseGuards(AuthGuard(), IsOwnerGuard)
   async deletePost(
     @Param('postID') postID: string,
     @CurrentUser() user: UserPayload,
