@@ -69,4 +69,9 @@ export class PostController {
   async getAllPostsByUserID(@Param('userID') userID: string) {
     return this.postService.getAllPostsByUserID(userID);
   }
+
+  @Get('feed/all')
+  async getAllPosts() {
+    return this.postService.getAllPosts();
+  }
 }
