@@ -11,7 +11,7 @@ export default function Feed() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-slate-950 to-slate-900 max-h-auto">
-      <div className="w-3/4 m-auto p-10 text-slate-50">
+      <div className="w-full lg:w-3/4 m-auto p-10 text-slate-50">
         <div className="w-full my-20 border border-sky-900 mb-10 p-3 bg-slate-950 rounded-md justify-between flex items-center">
           <input
             type="text"
@@ -28,14 +28,14 @@ export default function Feed() {
             <option value="collaborators">Looking for Collaborators</option>
           </select>
         </div>
-        <div className="flex space-x-3">
-          <div className="w-3/4">
+        <div className="lg:flex space-x-3 lg:space-y-0 space-y-4">
+          <div className="lg:w-3/4 w-full">
             {currentUser && (
               <div className="flex flex-col">
                 <h3 className="font-mono text-white text-2xl font-semibold mb-5">
                   What're you programming today, @{currentUser?.username}?
                 </h3>
-                <div className="flex space-x-3">
+                <div className="lg:flex md:flex space-x-3 lg:space-y-0 space-y-3">
                   <img
                     src={currentUser.profilePicture}
                     alt="Profile Picture"
@@ -83,7 +83,7 @@ export default function Feed() {
               Posts go here...
             </div>
           </div>
-          <div className="w-1/4 border border-sky-950 rounded-md">
+          <div className="w-full lg:w-1/4 border border-sky-950 rounded-md">
             <h3 className="p-2 text-lg font-semibold text-center border-b border-sky-950 bg-slate-900">
               Popular Tags
             </h3>
