@@ -36,6 +36,14 @@ export default function App() {
           />
           <Route path="/post/:postId" element={<PostContent />} />
           <Route
+            path="/post/:postId/edit"
+            element={
+              <ProtectedRoutesGuard>
+                <PostForm />
+              </ProtectedRoutesGuard>
+            }
+          />
+          <Route
             path="/users"
             element={
               <ProtectedRoutesGuard>
