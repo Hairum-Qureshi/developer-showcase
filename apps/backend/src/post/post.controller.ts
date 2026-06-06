@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   UploadedFiles,
   UseGuards,
@@ -44,6 +45,27 @@ export class PostController {
   @Get(':postID')
   async getPost(@Param('postID') postID: string) {
     return this.postService.getPostByID(postID);
+  }
+
+  @Patch(':postID/edit')
+  @UseGuards(AuthGuard(), IsOwnerGuard)
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'thumbnail', maxCount: 1 },
+      { name: 'slideShowImages', maxCount: 9 },
+    ]),
+  )
+  updatePostFiles(
+    @UploadedFiles()
+    files: {
+      thumbnail?: Express.Multer.File[];
+      slideShowImages?: Express.Multer.File[];
+    },
+    @Param('postID') postID: string,
+    @Body() postData: PostDto,
+    @CurrentUser() user: UserPayload,
+  ) {
+    return this.postService.updatePost(postID, postData, files, user.user_id);
   }
 
   @Delete(':postID')
