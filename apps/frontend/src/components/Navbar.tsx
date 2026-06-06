@@ -3,6 +3,7 @@ import { useCurrentUser } from "../hooks/useCurrentUser";
 import useAuthForm from "../hooks/useAuthForm";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { useState } from "react";
+import { IoCloseSharp } from "react-icons/io5";
 
 export default function Navbar() {
   const { data: currentUser } = useCurrentUser();
@@ -22,10 +23,17 @@ export default function Navbar() {
           </h1>
         </Link>
       )}
-      <GiHamburgerMenu
-        className="lg:hidden text-white ml-auto text-2xl hover:cursor-pointer"
-        onClick={() => setOpen(!open)}
-      />
+      {open ? (
+        <IoCloseSharp
+          className="lg:hidden text-white ml-auto text-3xl hover:cursor-pointer"
+          onClick={() => setOpen(false)}
+        />
+      ) : (
+        <GiHamburgerMenu
+          className="lg:hidden text-white ml-auto text-2xl hover:cursor-pointer"
+          onClick={() => setOpen(true)}
+        />
+      )}
       <ul className="mt-2 hidden lg:block">
         <li className="inline-block mr-4 hover:text-slate-400">
           <Link to="/feed">Feed</Link>
