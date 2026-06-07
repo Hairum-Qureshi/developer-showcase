@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import usePost from "../hooks/usePost";
+import { useCurrentUser } from "../hooks/useCurrentUser";
 
 export default function Post({
   postID,
@@ -9,6 +10,7 @@ export default function Post({
   githubLink,
   liveDemoLink,
   tags,
+  postUserID,
 }: {
   postID: string;
   thumbnail: string;
@@ -17,26 +19,30 @@ export default function Post({
   githubLink: string;
   liveDemoLink: string;
   tags: string[];
+  postUserID: string;
 }) {
   const { deletePostMutation } = usePost();
+  const { data: currUserData } = useCurrentUser();
 
   return (
     <div className="group relative overflow-hidden rounded-2xl border border-slate-800 bg-gradient-to-r from-sky-500/10 via-transparent to-purple-500/10 shadow-md">
       <div className="overflow-hidden">
-        <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition flex gap-2">
-          <Link
-            to={`/post/${postID}/edit`}
-            className="px-4 py-0.5 bg-blue-800 hover:cursor-pointer hover:bg-blue-700 text-white rounded-md"
-          >
-            Edit
-          </Link>
-          <button
-            className="px-4 py-0.5 hover:cursor-pointer bg-red-600 hover:bg-red-500 text-white rounded-md"
-            onClick={() => deletePostMutation.mutate(postID as string)}
-          >
-            Delete
-          </button>
-        </div>
+        {currUserData?.user_id === postUserID && (
+          <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition flex gap-2">
+            <Link
+              to={`/post/${postID}/edit`}
+              className="px-4 py-0.5 bg-blue-800 hover:cursor-pointer hover:bg-blue-700 text-white rounded-md"
+            >
+              Edit
+            </Link>
+            <button
+              className="px-4 py-0.5 hover:cursor-pointer bg-red-600 hover:bg-red-500 text-white rounded-md"
+              onClick={() => deletePostMutation.mutate(postID as string)}
+            >
+              Delete
+            </button>
+          </div>
+        )}
         <img
           src={thumbnail}
           alt={"Post Thumbnail"}
