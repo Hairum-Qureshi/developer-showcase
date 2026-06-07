@@ -123,7 +123,7 @@ export default function PostForm() {
               className="w-full text-lg bg-transparent outline-none text-white border-b border-slate-500 pb-3"
             />
             <p className="ml-auto text-sm text-slate-500">
-              {title.length}/150 Characters Remaining
+              {title?.length}/150 Characters Remaining
             </p>
           </div>
           <div>
