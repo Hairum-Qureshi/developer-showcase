@@ -1,13 +1,23 @@
 type PostType = {
   post_id: string;
-  thumbnail_url: string;
+  thumbnail_url?: string;
   title: string;
   description: string;
-  github_link: string;
-  live_demo_link: string;
-  tags: string[];
+  github_link?: string;
+  live_demo_link?: string;
+  tags?: string[];
   user_id: string;
   created_at: string;
+};
+
+type FeedPostType = Omit<PostType, "user_id"> & {
+  user: {
+    user_id: string;
+    username: string;
+    profile_picture_seed: string;
+    avatar: string | null;
+  };
+  post_type: "feed" | "showcase";
 };
 
 type UserType = {
@@ -18,4 +28,4 @@ type UserType = {
   created_at: string;
 };
 
-export type { PostType, UserType };
+export type { PostType, FeedPostType, UserType };
