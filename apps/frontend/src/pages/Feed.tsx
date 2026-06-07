@@ -111,6 +111,7 @@ export default function Feed() {
                         content={content}
                         createdAt={created_at}
                         profilePicture={profilePicture}
+                        user_id={user.user_id}
                       />
                     );
                   }
