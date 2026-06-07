@@ -24,6 +24,7 @@ This document tracks planned features, optimizations, and known bugs. Feel free 
 - [ ] **Display Character Limit Counts:** Display a visible min and max character count for feed posts.
 - [ ] **Display Error Messages:** Display helpful error messages when creating a showcase post or editing a bio or creating a feed post or signing in/up.
 - [ ] **Better Post Date Formatting:** Instead of feed posts listing the date, have them say "x minutes/hours/days" ago.
+- [ ] **Listing Your Feed Posts on Your Profile:** Populating the section on your profile so it displays all your feed posts there for you to view and delete instead of just on the main feed page.
 
 ### Search & Discovery
 
