@@ -3,15 +3,14 @@ import Markdown from "react-markdown";
 import ImageUploading from "react-images-uploading";
 import type { ImageListType } from "react-images-uploading";
 import usePost from "../hooks/usePost";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
 export default function PostForm() {
   const [showRenderedMarkdown, setShowRenderedMarkdown] = useState(false);
   const maxNumber = 9;
-  const { postMutation } = usePost();
+  const { postMutation, postData, updatePostMutation } = usePost();
   const location = useLocation();
   const isEditForm = location.pathname.includes("edit");
-  const { postData } = usePost();
   const [images, setImages] = useState<ImageListType>(
     isEditForm
       ? postData?.slideshow_image_urls.map((url: string) => ({
@@ -19,6 +18,7 @@ export default function PostForm() {
         })) || []
       : [],
   );
+  const { postId } = useParams();
 
   const [thumbnail, setThumbnail] = useState<ImageListType>(
     isEditForm
@@ -262,7 +262,18 @@ export default function PostForm() {
             {isEditForm ? (
               <button
                 className="px-5 py-2 bg-sky-500 text-white rounded-md hover:bg-sky-600 hover:cursor-pointer"
-                onClick={}
+                onClick={() =>
+                  updatePostMutation.mutate({
+                    postID: postId as string,
+                    title,
+                    markdownDescription: markdownContent,
+                    tags,
+                    projectLink,
+                    liveLink,
+                    thumbnail: thumbnail[0]?.file as File,
+                    slideShowImages: images.map((img) => img.file) as File[],
+                  })
+                }
               >
                 Update Post
               </button>
