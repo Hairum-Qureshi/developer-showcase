@@ -174,7 +174,7 @@ export default function Profile() {
                 {!allPostsData?.length ? (
                   <p className="text-gray-500">No projects to show.</p>
                 ) : (
-                  allPostsData.map((post: PostType) => (
+                  allPostsData?.map((post: PostType) => (
                     <Post
                       key={post.post_id}
                       postID={post.post_id}
@@ -184,6 +184,7 @@ export default function Profile() {
                       githubLink={post.github_link}
                       liveDemoLink={post.live_demo_link}
                       tags={post.tags}
+                      postUserID={post.user_id}
                     />
                   ))
                 )}
