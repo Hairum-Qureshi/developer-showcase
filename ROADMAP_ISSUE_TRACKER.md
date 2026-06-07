@@ -54,3 +54,7 @@ The following bugs have been identified and are awaiting a fix:
 
 - [ ] **Bio Editing Population:** - **Issue:** Occasionally, when a user clicks to edit their bio, the textarea fails to populate with their existing content.
   - **Potential Cause:** Race condition between component mounting and data fetching/state hydration.
+
+### Feed
+
+- [ ] **Feed Container Width Adjustment:** - Not a serious issue, but for some reason when adding a feed post, it slightly expands the width of the parent container it's in. It's not noticeable until you delete the post and see the width shift back.
