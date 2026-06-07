@@ -333,3 +333,75 @@ The application was intentionally built without an ORM to provide hands-on exper
 - Authentication systems
 - Full-stack application architecture
 - Managing application data using raw SQL
+
+---
+
+## NeonDB Table Schemas
+
+### Entity Relationship Map
+
+Below is a quick overview of how the tables relate to each other:
+
+- **`users`**
+  - `user_id` (BIGINT, PK)
+  - `email` (VARCHAR, UNIQUE) — _3-255 chars_
+  - `username` (TEXT, UNIQUE) — _Min 6 chars_
+  - `password_hash` (TEXT)
+  - `profile_picture_seed` (UUID)
+  - `biography` (VARCHAR)
+- **`posts`**
+  - `post_id` (BIGINT, PK)
+  - `user_id` (BIGINT, FK ➔ `users.user_id`)
+  - `title` (VARCHAR) — _10-150 chars_
+  - `content` (VARCHAR) — _100-1000 chars_
+  - `slideshow_image_urls` (TEXT[]) — _Max 9 images_
+  - `tags` (TEXT[]) — _Max 5 tags_
+  - `thumbnail_url` / `project_repo_link` / `live_project_link` (TEXT)
+- **`comments`**
+  - `comment_id` (BIGINT, PK)
+  - `user_id` (BIGINT, FK ➔ `users.user_id`)
+  - `post_id` (BIGINT, FK ➔ `posts.post_id`)
+  - `content` (VARCHAR) — _5-500 chars_
+  - `reply_to_id` (BIGINT, FK ➔ `comments.comment_id`) — _Self-referencing for nested threads_
+
+---
+
+```sql
+-- 1. Create Users Table First
+CREATE TABLE users (
+    user_id BIGINT PRIMARY KEY,
+    email VARCHAR(255) UNIQUE NOT NULL CHECK (char_length(email) BETWEEN 3 AND 255),
+    profile_picture_seed UUID DEFAULT gen_random_uuid(),
+    username TEXT UNIQUE NOT NULL CHECK (char_length(username) >= 6),
+    biography VARCHAR(400) NOT NULL DEFAULT 'This user prefers to keep an air of mystery about themselves...',
+    password_hash TEXT NOT NULL CHECK (char_length(password_hash) >= 6),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 2. Create Posts Table (Depends on Users)
+CREATE TABLE posts (
+    post_id BIGINT PRIMARY KEY,
+    user_id BIGINT REFERENCES users(user_id) NOT NULL,
+    thumbnail_url TEXT DEFAULT '[https://prairiesigns.com/assets/img/placeholder_600x400.svg](https://prairiesigns.com/assets/img/placeholder_600x400.svg)',
+    title VARCHAR(150) NOT NULL CHECK (char_length(title) BETWEEN 10 AND 150),
+    content VARCHAR(1000) NOT NULL CHECK (char_length(content) BETWEEN 100 AND 1000),
+    slideshow_image_urls TEXT[] NOT NULL DEFAULT '{}' CHECK (cardinality(slideshow_image_urls) <= 9),
+    project_repo_link TEXT,
+    live_project_link TEXT,
+    tags TEXT[] NOT NULL DEFAULT '{}' CHECK (cardinality(tags) <= 5),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 3. Create Comments Table (Depends on Users, Posts, and Self)
+CREATE TABLE comments (
+    comment_id BIGINT PRIMARY KEY,
+    user_id BIGINT REFERENCES users(user_id) NOT NULL,
+    post_id BIGINT REFERENCES posts(post_id) NOT NULL,
+    content VARCHAR(500) NOT NULL CHECK (char_length(content) BETWEEN 5 AND 500),
+    reply_to_id BIGINT REFERENCES comments(comment_id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
