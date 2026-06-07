@@ -10,6 +10,7 @@ import GitHubAuthButton from "../components/GitHubAuthButton";
 import usePost from "../hooks/usePost";
 import Post from "../components/Post";
 import type { PostType } from "../types";
+import { IoIosInformationCircleOutline } from "react-icons/io";
 
 export default function Profile() {
   const { data: currUserData } = useCurrentUser();
@@ -42,6 +43,7 @@ export default function Profile() {
                 <div>
                   <p className="text-gray-400">{profileData?.email}</p>
                   <p className="text-slate-600 text-xs">
+                    <IoIosInformationCircleOutline className="inline mb-1 mr-1" />
                     Your email is not visible to other users.
                   </p>
                 </div>
