@@ -221,11 +221,53 @@ export default function usePost() {
     },
   });
 
+  const { data: allFeedPosts } = useQuery({
+    queryKey: ["feedPosts"],
+    queryFn: async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/post/feed/all`,
+        );
+        return response.data;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+  });
+
+  const createFeedPostMutation = useMutation({
+    mutationFn: async (content: string) => {
+      try {
+        if (!content.trim().length || content.trim().length > 1000) {
+          alert("Content must be between 1 and 1000 characters.");
+          return;
+        }
+
+        const response = await axios.post(
+          `${import.meta.env.VITE_BACKEND_URL}/api/post/new/status`,
+          { content },
+          { withCredentials: true },
+        );
+        return response.data;
+      } catch (error) {
+        console.error(
+          "Error creating feed post:",
+          (error as AxiosError).response?.data,
+        );
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["feedPosts"] });
+    },
+  });
+
   return {
     postMutation,
     allPostsData,
     postData,
     deletePostMutation,
     updatePostMutation,
+    allFeedPosts,
+    createFeedPostMutation,
   };
 }
