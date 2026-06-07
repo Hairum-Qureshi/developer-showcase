@@ -6,12 +6,7 @@ type PostType = {
   github_link: string;
   live_demo_link: string;
   tags: string[];
-  user: {
-    user_id: string;
-    username: string;
-    avatar: string | null;
-    profile_picture_seed: string;
-  };
+  user_id: string;
   created_at: string;
 };
 
