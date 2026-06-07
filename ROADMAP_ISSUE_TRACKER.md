@@ -18,6 +18,7 @@ This document tracks planned features, optimizations, and known bugs. Feel free 
 
 - [ ] **Comments Section:** Implement a fully functioning comments section for both Feed posts and Showcase posts.
 - [ ] **Interactive Tags:** Make tags clickable so users can quickly explore topics.
+- [ ] **Updating post images:** While you can edit posts, you are unable to modify your post's images.
 
 ### Search & Discovery
 
