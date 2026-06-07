@@ -17,6 +17,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { CurrentUser } from '../decorators/currentUser.decorator';
 import type { UserPayload } from '../types';
 import { IsOwnerGuard } from '../guards/IsOwner.guard';
+import { EditPostDto } from '../DTOs/editPost.dto';
 
 @Controller('post')
 export class PostController {
@@ -62,7 +63,7 @@ export class PostController {
       slideShowImages?: Express.Multer.File[];
     },
     @Param('postID') postID: string,
-    @Body() postData: PostDto,
+    @Body() postData: EditPostDto,
     @CurrentUser() user: UserPayload,
   ) {
     return this.postService.updatePost(postID, postData, files, user.user_id);
