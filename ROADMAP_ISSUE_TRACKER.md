@@ -23,6 +23,7 @@ This document tracks planned features, optimizations, and known bugs. Feel free 
 - [ ] **Hashtag Highlighting:** If users add hashtags in their feed posts, change the colors so they stand out from the text.
 - [ ] **Display Character Limit Counts:** Display a visible min and max character count for feed posts.
 - [ ] **Display Error Messages:** Display helpful error messages when creating a showcase post or editing a bio or creating a feed post or signing in/up.
+- [ ] **Better Post Date Formatting:** Instead of feed posts listing the date, have them say "x minutes/hours/days" ago.
 
 ### Search & Discovery
 
