@@ -1,18 +1,23 @@
 import { FaRegHeart } from "react-icons/fa";
 import { FaRegComment } from "react-icons/fa";
-import { GoKebabHorizontal } from "react-icons/go";
+import { FaEdit } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
+import { useCurrentUser } from "../hooks/useCurrentUser";
 
 export default function FeedPost({
   username,
   createdAt,
   content,
   profilePicture,
+  user_id,
 }: {
   username: string;
   createdAt: string;
   content: string;
   profilePicture: string;
+  user_id: string;
 }) {
+  const { data: currentUser } = useCurrentUser();
   return (
     <div className="w-full border border-slate-700 rounded-md p-3 bg-slate-950">
       <div className="flex justify-between mb-3 w-full">
@@ -29,9 +34,12 @@ export default function FeedPost({
             <p className="text-xs text-gray-500">{createdAt}</p>
           </div>
         </div>
-        <div className="flex items-start pt-0.5 text-xl">
-          <GoKebabHorizontal className="text-gray-500 hover:text-gray-300 cursor-pointer transition-colors" />
-        </div>
+        {currentUser?.user_id === user_id && (
+          <div className="flex items-start pt-0.5 text-base">
+            <FaEdit className="text-gray-500 hover:text-gray-300 cursor-pointer transition-colors" />
+            <FaTrash className="text-gray-500 hover:text-gray-300 cursor-pointer transition-colors ml-2" />
+          </div>
+        )}
       </div>
       <p className="text-gray-300 text-sm mb-2 wrap-break-word">{content}</p>
       <div className="flex space-x-4">
