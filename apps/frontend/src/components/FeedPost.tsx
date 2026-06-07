@@ -3,21 +3,26 @@ import { FaRegComment } from "react-icons/fa";
 import { FaEdit } from "react-icons/fa";
 import { FaTrash } from "react-icons/fa";
 import { useCurrentUser } from "../hooks/useCurrentUser";
+import usePost from "../hooks/usePost";
 
 export default function FeedPost({
   username,
   createdAt,
   content,
   profilePicture,
+  post_id,
   user_id,
 }: {
   username: string;
   createdAt: string;
   content: string;
   profilePicture: string;
+  post_id: string;
   user_id: string;
 }) {
   const { data: currentUser } = useCurrentUser();
+  const { deletePostMutation } = usePost();
+
   return (
     <div className="w-full border border-slate-700 rounded-md p-3 bg-slate-950">
       <div className="flex justify-between mb-3 w-full">
@@ -37,7 +42,10 @@ export default function FeedPost({
         {currentUser?.user_id === user_id && (
           <div className="flex items-start pt-0.5 text-base">
             <FaEdit className="text-gray-500 hover:text-gray-300 cursor-pointer transition-colors" />
-            <FaTrash className="text-gray-500 hover:text-gray-300 cursor-pointer transition-colors ml-2" />
+            <FaTrash
+              className="text-gray-500 hover:text-gray-300 cursor-pointer transition-colors ml-2"
+              onClick={() => deletePostMutation.mutate(post_id)}
+            />
           </div>
         )}
       </div>
