@@ -34,12 +34,17 @@ export default function Profile() {
               alt="Profile Picture"
               className="w-32 h-32 rounded-md border border-sky-800 mb-4"
             />
-            <div>
+            <div className="space-y-4">
               <h1 className="text-2xl font-bold mb-2">
                 {profileData?.username}
               </h1>
               {currUserData?.user_id === profileData?.user_id && (
-                <p className="text-gray-400 mb-4">{profileData?.email}</p>
+                <div>
+                  <p className="text-gray-400">{profileData?.email}</p>
+                  <p className="text-slate-600 text-xs">
+                    Your email is not visible to other users.
+                  </p>
+                </div>
               )}
               <p className="text-gray-400 mb-4">
                 Joined: {new Date(profileData?.createdAt).toLocaleDateString()}
