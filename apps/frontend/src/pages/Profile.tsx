@@ -20,7 +20,6 @@ export default function Profile() {
   const { updateBiographyMutation } = useAccount();
   const { allPostsData } = usePost();
 
-  // TODO - make it so that your GitHub username isn't hardcoded and it's dynamic
   // TODO - make it so that the textarea restricts you from going beyond 400 characters with markdown
   // TODO - make it so that when you hit the edit button, the textarea is populated with the current biography and not blank
   // TODO - figure out the linking logic
