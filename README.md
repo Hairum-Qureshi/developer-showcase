@@ -352,6 +352,7 @@ Below is a quick overview of how the tables relate to each other:
 - **`posts`**
   - `post_id` (BIGINT, PK)
   - `user_id` (BIGINT, FK ➔ `users.user_id`)
+  - `post_type` (ENUM `post_types`) — _'showcase' or 'feed'_
   - `title` (VARCHAR) — _10-150 chars_
   - `content` (VARCHAR) — _100-1000 chars_
   - `slideshow_image_urls` (TEXT[]) — _Max 9 images_
@@ -367,6 +368,9 @@ Below is a quick overview of how the tables relate to each other:
 ---
 
 ```sql
+-- 0. Create Custom Enum Types
+CREATE TYPE post_types AS ENUM ('showcase', 'feed');
+
 -- 1. Create Users Table First
 CREATE TABLE users (
     user_id BIGINT PRIMARY KEY,
@@ -379,10 +383,11 @@ CREATE TABLE users (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 2. Create Posts Table (Depends on Users)
+-- 2. Create Posts Table (Depends on Users and Enum Types)
 CREATE TABLE posts (
     post_id BIGINT PRIMARY KEY,
     user_id BIGINT REFERENCES users(user_id) NOT NULL,
+    post_type post_types NOT NULL,
     thumbnail_url TEXT DEFAULT '[https://prairiesigns.com/assets/img/placeholder_600x400.svg](https://prairiesigns.com/assets/img/placeholder_600x400.svg)',
     title VARCHAR(150) NOT NULL CHECK (char_length(title) BETWEEN 10 AND 150),
     content VARCHAR(1000) NOT NULL CHECK (char_length(content) BETWEEN 100 AND 1000),
@@ -411,3 +416,7 @@ CREATE TABLE comments (
 ## Roadmap & Issue Tracker
 
 [Click here to view the future roadmap and issue tracker](./ROADMAP_ISSUE_TRACKER.md)
+
+```
+
+```
