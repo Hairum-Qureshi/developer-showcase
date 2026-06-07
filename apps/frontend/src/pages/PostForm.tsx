@@ -4,6 +4,7 @@ import ImageUploading from "react-images-uploading";
 import type { ImageListType } from "react-images-uploading";
 import usePost from "../hooks/usePost";
 import { useLocation, useParams } from "react-router-dom";
+import removeMd from "remove-markdown";
 
 export default function PostForm() {
   const [showRenderedMarkdown, setShowRenderedMarkdown] = useState(false);
@@ -151,7 +152,7 @@ export default function PostForm() {
                 />
                 <div className="flex w-full text-sm text-slate-500 justify-between items-center">
                   <p>This editor supports markdown</p>
-                  <p>0/1000 Characters Remaining</p>
+                  <p>{removeMd(markdownContent).length}/1000 Characters Remaining</p>
                 </div>
               </>
             )}
