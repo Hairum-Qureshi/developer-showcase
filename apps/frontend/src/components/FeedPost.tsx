@@ -7,7 +7,7 @@ export default function FeedPost() {
     <div className="w-full border border-slate-700 rounded-md p-3 bg-slate-950">
       <div className="flex justify-between mb-3 w-full">
         <div className="flex items-center">
-          <div className="w-10 h-10 rounded-full bg-slate-700 mr-3 shrink-0" />
+          <div className="w-10 h-10 rounded-md bg-slate-700 mr-3 shrink-0" />
           <div>
             <p className="text-sm font-bold leading-none mb-1">Username</p>
             <p className="text-xs text-gray-500">2 hours ago</p>
