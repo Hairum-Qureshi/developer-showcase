@@ -11,7 +11,7 @@ export default function Feed() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-slate-950 to-slate-900 max-h-auto">
-      <div className="w-full lg:w-3/4 m-auto p-10 text-slate-50">
+      <div className="w-full lg:w-3/4 m-auto p-5 text-slate-50">
         <div className="w-full my-20 border border-sky-900 mb-10 p-3 bg-slate-950 rounded-md justify-between flex items-center">
           <input
             type="text"
