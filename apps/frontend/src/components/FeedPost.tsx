@@ -36,7 +36,9 @@ export default function FeedPost({
           </div>
           <div>
             <p className="text-sm font-bold leading-none mb-1">{username}</p>
-            <p className="text-xs text-gray-500">{createdAt}</p>
+            <p className="text-xs text-gray-500">
+              {new Date(createdAt).toLocaleString()}
+            </p>
           </div>
         </div>
         {currentUser?.user_id === user_id && (
