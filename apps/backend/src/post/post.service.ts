@@ -175,6 +175,13 @@ export class PostService {
       throw new HttpException('Status content cannot be empty', 400);
     }
 
+    if (content.length < 100) {
+      throw new HttpException(
+        'Status content must be at least 100 characters',
+        400,
+      );
+    }
+
     if (content.length > 280) {
       throw new HttpException(
         'Status content cannot exceed 280 characters',
