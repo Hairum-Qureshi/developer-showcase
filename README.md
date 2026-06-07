@@ -416,7 +416,3 @@ CREATE TABLE comments (
 ## Roadmap & Issue Tracker
 
 [Click here to view the future roadmap and issue tracker](./ROADMAP_ISSUE_TRACKER.md)
-
-```
-
-```
