@@ -8,6 +8,7 @@ import strip from 'strip-markdown';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { ConfigService } from '@nestjs/config';
+import { EditPostDto } from '../DTOs/editPost.dto';
 
 @Injectable()
 export class PostService {
@@ -85,7 +86,7 @@ export class PostService {
     }
 
     await this
-      .sql`INSERT INTO posts (post_id, user_id, title, content, project_repo_link, live_project_link, tags, thumbnail_url, slideshow_image_urls) VALUES (${postID}, ${user_id}, ${title}, ${sanitizedContent}, ${projectRepoLink}, ${liveProjectLink}, ${formattedTags}, ${thumbnailURL}, ${slideShowURLs})`;
+      .sql`INSERT INTO posts (post_id, user_id, title, content, project_repo_link, live_project_link, tags, thumbnail_url, slideshow_image_urls, post_type) VALUES (${postID}, ${user_id}, ${title}, ${sanitizedContent}, ${projectRepoLink}, ${liveProjectLink}, ${formattedTags}, ${thumbnailURL}, ${slideShowURLs}, 'showcase)`;
 
     return { postID };
   }
@@ -189,7 +190,7 @@ export class PostService {
     const postID = snowflake.generate();
 
     await this
-      .sql`INSERT INTO posts (post_id, user_id, title, content) VALUES (${postID}, ${userID}, 'STATUS POST', ${content})`;
+      .sql`INSERT INTO posts (post_id, user_id, title, content, post_type) VALUES (${postID}, ${userID}, 'STATUS POST', ${content}, 'feed')`;
 
     return { postID };
   }
@@ -202,6 +203,7 @@ export class PostService {
         posts.title,
         posts.content,
         posts.tags,
+        posts.post_type,
         posts.created_at,
 
         json_build_object(
@@ -214,8 +216,80 @@ export class PostService {
         FROM posts
         JOIN users
           ON posts.user_id = users.user_id
+
+        ORDER BY posts.created_at DESC
       `;
 
     return posts;
+  }
+
+  async updatePost(
+    postID: string,
+    postData: EditPostDto,
+    files: {
+      thumbnail?: Express.Multer.File[];
+      slideShowImages?: Express.Multer.File[];
+    },
+    user_id: string,
+  ) {
+    const { title, content, projectRepoLink, liveProjectLink, tags } = postData;
+
+    const formattedTags = tags?.map((tag: string) =>
+      tag.trim().toLowerCase().replace(/\s+/g, '-'),
+    );
+
+    let sanitizedContent: string | undefined = undefined;
+    if (content) {
+      sanitizedContent = DOMPurify.sanitize(content, {
+        FORCE_BODY: true,
+      });
+
+      const strippedMarkdown = await remark()
+        .use(strip)
+        .process(sanitizedContent);
+
+      if (
+        strippedMarkdown.toString().length < 100 ||
+        strippedMarkdown.toString().length > 1000
+      )
+        throw new HttpException(
+          'Content must be between 100 and 1000 characters',
+          400,
+        );
+    }
+
+    // let thumbnailURL: string | undefined = undefined;
+    // const slideShowURLs: string[] = [];
+
+    // const thumbnailFile = files.thumbnail?.[0];
+    // if (thumbnailFile) {
+    //   await this.uploadCare
+    //     .uploadFile(thumbnailFile.buffer, {
+    //       fileName: `post-${postID}-thumbnail`,
+    //     })
+    //     .then((file) => {
+    //       thumbnailURL = `https://ky3lm3s6xp.ucarecd.net/${file.uuid}/`;
+    //     });
+    // }
+
+    // const slideShowFiles = files.slideShowImages || [];
+    // if (slideShowFiles.length) {
+    //   for (const [index, file] of slideShowFiles.entries()) {
+    //     await this.uploadCare
+    //       .uploadFile(file.buffer, {
+    //         fileName: `post-${postID}-slide-${index}`,
+    //       })
+    //       .then((uploadedFile) => {
+    //         const fileURL = `https://ky3lm3s6xp.ucarecd.net/${uploadedFile.uuid}/`;
+    //         slideShowURLs.push(fileURL);
+    //       });
+    //   }
+    // }
+
+    // TODO - handle updating slideshow_image_urls and thumbnail_url when files are included in the update request
+    await this
+      .sql`UPDATE posts SET title=${title}, content=${sanitizedContent}, project_repo_link=${projectRepoLink || null}, live_project_link=${liveProjectLink || null}, tags=${formattedTags} WHERE post_id=${postID} AND user_id=${user_id}`;
+
+    return { postID };
   }
 }
