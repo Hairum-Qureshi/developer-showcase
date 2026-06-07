@@ -3,11 +3,18 @@ import { useCurrentUser } from "../hooks/useCurrentUser";
 import { IoIosInformationCircleOutline } from "react-icons/io";
 import UserCard from "../components/UserCard";
 import useUsers from "../hooks/useUsers";
-import type { UserType } from "../types";
+import type { FeedPostType, PostType, UserType } from "../types";
+import FeedPost from "../components/FeedPost";
+import usePost from "../hooks/usePost";
+import Post from "../components/Post";
+import { useState } from "react";
 
 export default function Feed() {
   const { data: currentUser } = useCurrentUser();
   const { users } = useUsers();
+  const { allFeedPosts } = usePost();
+  const [postContent, setPostContent] = useState("");
+  const { createFeedPostMutation } = usePost();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-slate-950 to-slate-900 max-h-auto">
@@ -48,6 +55,8 @@ export default function Feed() {
                       data-gramm="false"
                       data-gramm_editor="false"
                       data-gramm_id="12345678"
+                      value={postContent}
+                      onChange={(e) => setPostContent(e.target.value)}
                     />
                     <div className="flex items-center justify-between border-t border-sky-950 bg-slate-900 px-3 py-2">
                       <div className="flex items-start space-x-2 text-gray-500">
@@ -69,6 +78,10 @@ export default function Feed() {
                       <button
                         type="button"
                         className="ml-4 shrink-0 px-4 py-2 bg-sky-600 text-white rounded-md hover:bg-sky-700 transition-colors hover:cursor-pointer"
+                        onClick={() => {
+                          createFeedPostMutation.mutate(postContent);
+                          setPostContent("");
+                        }}
                       >
                         Post
                       </button>
@@ -78,9 +91,44 @@ export default function Feed() {
               </div>
             )}
             <div
-              className={`${!currentUser ? "" : "mt-3"} border border-sky-950 rounded-md p-3 w-full`}
+              className={`${!currentUser ? "" : "mt-3"} flex flex-col space-y-4 border border-sky-950 rounded-md p-3 w-full`}
             >
-              Posts go here...
+              {!allFeedPosts?.length ? (
+                <p className="text-gray-500 text-center">No posts to show.</p>
+              ) : (
+                allFeedPosts.map((post: FeedPostType | PostType) => {
+                  if (post.post_type === "feed") {
+                    const { user, created_at, content } = post;
+
+                    const profilePicture = user.avatar
+                      ? user.avatar
+                      : `https://api.dicebear.com/9.x/identicon/svg?seed=${user.profile_picture_seed}`;
+
+                    return (
+                      <FeedPost
+                        key={post.post_id}
+                        username={user.username}
+                        content={content}
+                        createdAt={created_at}
+                        profilePicture={profilePicture}
+                      />
+                    );
+                  }
+                  return (
+                    <Post
+                      key={post.post_id}
+                      postID={post.post_id}
+                      thumbnail={post.thumbnail_url}
+                      title={post.title}
+                      description={post.description}
+                      githubLink={post.github_link as string}
+                      liveDemoLink={post.live_demo_link as string}
+                      tags={post.tags as string[]}
+                      postUserID={post.user_id}
+                    />
+                  );
+                })
+              )}
             </div>
           </div>
           <div className="w-full lg:w-1/4 border border-sky-950 rounded-md">
