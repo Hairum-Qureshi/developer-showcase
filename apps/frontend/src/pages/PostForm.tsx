@@ -73,7 +73,6 @@ export default function PostForm() {
                         alt="Thumbnail"
                         className="w-full h-full object-cover rounded-md"
                       />
-                      {/* Overlay for actions when image exists */}
                       <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                         <button
                           type="button"
@@ -112,7 +111,7 @@ export default function PostForm() {
           </p>
         </div>
         <div className="text-white space-y-8">
-          <div>
+          <div className="flex flex-col w-full">
             <label className="block mb-2 text-lg text-slate-400">
               Title <span className="text-red-500">*</span>
             </label>
@@ -123,6 +122,9 @@ export default function PostForm() {
               onChange={(e) => setTitle(e.target.value)}
               className="w-full text-lg bg-transparent outline-none text-white border-b border-slate-500 pb-3"
             />
+            <p className="ml-auto text-sm text-slate-500">
+              {title.length}/150 Characters Remaining
+            </p>
           </div>
           <div>
             <div className="flex justify-between items-center">
@@ -152,7 +154,9 @@ export default function PostForm() {
                 />
                 <div className="flex w-full text-sm text-slate-500 justify-between items-center">
                   <p>This editor supports markdown</p>
-                  <p>{removeMd(markdownContent).length}/1000 Characters Remaining</p>
+                  <p>
+                    {removeMd(markdownContent).length}/1000 Characters Remaining
+                  </p>
                 </div>
               </>
             )}
