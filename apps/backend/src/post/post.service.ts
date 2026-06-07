@@ -86,7 +86,7 @@ export class PostService {
     }
 
     await this
-      .sql`INSERT INTO posts (post_id, user_id, title, content, project_repo_link, live_project_link, tags, thumbnail_url, slideshow_image_urls, post_type) VALUES (${postID}, ${user_id}, ${title}, ${sanitizedContent}, ${projectRepoLink}, ${liveProjectLink}, ${formattedTags}, ${thumbnailURL}, ${slideShowURLs}, 'showcase)`;
+      .sql`INSERT INTO posts (post_id, user_id, title, content, project_repo_link, live_project_link, tags, thumbnail_url, slideshow_image_urls, post_type) VALUES (${postID}, ${user_id}, ${title}, ${sanitizedContent}, ${projectRepoLink}, ${liveProjectLink}, ${formattedTags}, ${thumbnailURL}, ${slideShowURLs}, 'showcase')`;
 
     return { postID };
   }
