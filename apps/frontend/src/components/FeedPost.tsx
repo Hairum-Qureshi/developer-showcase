@@ -33,7 +33,7 @@ export default function FeedPost({
           <GoKebabHorizontal className="text-gray-500 hover:text-gray-300 cursor-pointer transition-colors" />
         </div>
       </div>
-      <p className="text-gray-300 text-sm mb-2">{content}</p>
+      <p className="text-gray-300 text-sm mb-2 break-words">{content}</p>
       <div className="flex space-x-4">
         <div className="flex items-center space-x-1 text-gray-500 hover:text-red-500 cursor-pointer transition-colors">
           <FaRegHeart />
