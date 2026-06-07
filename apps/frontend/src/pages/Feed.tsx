@@ -111,6 +111,7 @@ export default function Feed() {
                         content={content}
                         createdAt={created_at}
                         profilePicture={profilePicture}
+                        post_id={post.post_id}
                         user_id={user.user_id}
                       />
                     );
@@ -125,7 +126,7 @@ export default function Feed() {
                       githubLink={post.github_link as string}
                       liveDemoLink={post.live_demo_link as string}
                       tags={post.tags as string[]}
-                      postUserID={post.user_id}
+                      postUserID={(post).user_id}
                     />
                   );
                 })
