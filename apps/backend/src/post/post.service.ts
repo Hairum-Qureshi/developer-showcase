@@ -212,6 +212,7 @@ export class PostService {
         posts.tags,
         posts.post_type,
         posts.created_at,
+        posts.user_id::text,  
 
         json_build_object(
           'user_id', users.user_id::text,
