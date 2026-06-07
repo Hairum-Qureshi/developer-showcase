@@ -36,6 +36,7 @@ This document tracks planned features, optimizations, and known bugs. Feel free 
 
 - [ ] **Post Interactions:** Implement the ability for users to like and save posts.
 - [ ] **Comment Interactions:** Implement liking logic for comments within threads.
+- [ ] **Rate Limiting:** Implement limits on requests to prevent abuse to the backend.
 
 ---
 
