@@ -37,7 +37,7 @@ export default function FeedPost({
           <div>
             <p className="text-sm font-bold leading-none mb-1">{username}</p>
             <p className="text-xs text-gray-500">
-              {new Date(createdAt).toLocaleString()}
+              Posted On: {new Date(createdAt).toLocaleDateString()}
             </p>
           </div>
         </div>
