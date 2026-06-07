@@ -3,18 +3,42 @@ import Markdown from "react-markdown";
 import ImageUploading from "react-images-uploading";
 import type { ImageListType } from "react-images-uploading";
 import usePost from "../hooks/usePost";
+import { useLocation, useParams } from "react-router-dom";
+import removeMd from "remove-markdown";
 
 export default function PostForm() {
   const [showRenderedMarkdown, setShowRenderedMarkdown] = useState(false);
-  const [markdownContent, setMarkdownContent] = useState("");
-  const [images, setImages] = useState<ImageListType>([]);
-  const [thumbnail, setThumbnail] = useState<ImageListType>([]);
   const maxNumber = 9;
-  const [title, setTitle] = useState("");
-  const [tags, setTags] = useState("");
-  const [projectLink, setProjectLink] = useState("");
-  const [liveLink, setLiveLink] = useState("");
-  const { postMutation } = usePost();
+  const { postMutation, postData, updatePostMutation } = usePost();
+  const location = useLocation();
+  const isEditForm = location.pathname.includes("edit");
+  const [images, setImages] = useState<ImageListType>(
+    isEditForm
+      ? postData?.slideshow_image_urls.map((url: string) => ({
+          data_url: url,
+        })) || []
+      : [],
+  );
+  const { postId } = useParams();
+
+  const [thumbnail, setThumbnail] = useState<ImageListType>(
+    isEditForm
+      ? postData?.thumbnail_url
+        ? [{ thumbnail: postData.thumbnail_url }]
+        : []
+      : [],
+  );
+  const [title, setTitle] = useState(isEditForm ? postData?.title : "");
+  const [markdownContent, setMarkdownContent] = useState(
+    isEditForm ? postData?.content : "",
+  );
+  const [tags, setTags] = useState(isEditForm ? postData?.tags : "");
+  const [projectLink, setProjectLink] = useState(
+    isEditForm ? postData?.project_link : "",
+  );
+  const [liveLink, setLiveLink] = useState(
+    isEditForm ? postData?.live_link : "",
+  );
 
   // ! For some reason there's a weird bug due to the backend DTO restricting users from only adding 1 tag
   // ! When the user presses the publish button, there needs to be a loading state so the user can't spam the publish button
@@ -26,9 +50,9 @@ export default function PostForm() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-slate-950 to-slate-900">
       <div className="w-full lg:w-2/3 mx-auto lg:p-15 p-10  text-slate-50 space-y-5">
-        <h1 className="text-3xl font-semibold my-10">Create a New Post</h1>
-
-        {/* Thumbnail Section */}
+        <h1 className="text-3xl font-semibold my-10">
+          {isEditForm ? "Edit Your Post" : "Create a New Post"}
+        </h1>
         <div>
           <label className="block mb-2 text-lg text-slate-400">
             Upload Thumbnail <span className="text-red-500">*</span>
@@ -49,7 +73,6 @@ export default function PostForm() {
                         alt="Thumbnail"
                         className="w-full h-full object-cover rounded-md"
                       />
-                      {/* Overlay for actions when image exists */}
                       <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                         <button
                           type="button"
@@ -88,7 +111,7 @@ export default function PostForm() {
           </p>
         </div>
         <div className="text-white space-y-8">
-          <div>
+          <div className="flex flex-col w-full">
             <label className="block mb-2 text-lg text-slate-400">
               Title <span className="text-red-500">*</span>
             </label>
@@ -99,6 +122,9 @@ export default function PostForm() {
               onChange={(e) => setTitle(e.target.value)}
               className="w-full text-lg bg-transparent outline-none text-white border-b border-slate-500 pb-3"
             />
+            <p className="ml-auto text-sm text-slate-500">
+              {title.length}/150 Characters Remaining
+            </p>
           </div>
           <div>
             <div className="flex justify-between items-center">
@@ -128,7 +154,9 @@ export default function PostForm() {
                 />
                 <div className="flex w-full text-sm text-slate-500 justify-between items-center">
                   <p>This editor supports markdown</p>
-                  <p>0/1000 Characters Remaining</p>
+                  <p>
+                    {removeMd(markdownContent).length}/1000 Characters Remaining
+                  </p>
                 </div>
               </>
             )}
@@ -236,22 +264,42 @@ export default function PostForm() {
             />
           </div>
           <div className="flex justify-end">
-            <button
-              className="px-5 py-2 bg-sky-500 text-white rounded-md hover:bg-sky-600 hover:cursor-pointer"
-              onClick={() =>
-                postMutation.mutate({
-                  title,
-                  markdownDescription: markdownContent,
-                  tags,
-                  projectLink,
-                  liveLink,
-                  thumbnail: thumbnail[0]?.file as File,
-                  slideShowImages: images.map((img) => img.file) as File[],
-                })
-              }
-            >
-              Publish
-            </button>
+            {isEditForm ? (
+              <button
+                className="px-5 py-2 bg-sky-500 text-white rounded-md hover:bg-sky-600 hover:cursor-pointer"
+                onClick={() =>
+                  updatePostMutation.mutate({
+                    postID: postId as string,
+                    title,
+                    markdownDescription: markdownContent,
+                    tags,
+                    projectLink,
+                    liveLink,
+                    thumbnail: thumbnail[0]?.file as File,
+                    slideShowImages: images.map((img) => img.file) as File[],
+                  })
+                }
+              >
+                Update Post
+              </button>
+            ) : (
+              <button
+                className="px-5 py-2 bg-sky-500 text-white rounded-md hover:bg-sky-600 hover:cursor-pointer"
+                onClick={() =>
+                  postMutation.mutate({
+                    title,
+                    markdownDescription: markdownContent,
+                    tags,
+                    projectLink,
+                    liveLink,
+                    thumbnail: thumbnail[0]?.file as File,
+                    slideShowImages: images.map((img) => img.file) as File[],
+                  })
+                }
+              >
+                Publish
+              </button>
+            )}
           </div>
         </div>
       </div>
