@@ -19,6 +19,10 @@ This document tracks planned features, optimizations, and known bugs. Feel free 
 - [ ] **Comments Section:** Implement a fully functioning comments section for both Feed posts and Showcase posts.
 - [ ] **Interactive Tags:** Make tags clickable so users can quickly explore topics.
 - [ ] **Updating post images:** While you can edit posts, you are unable to modify your post's images.
+- [ ] **Editing Feed Posts:** Allow users to edit their feed posts.
+- [ ] **Hashtag Highlighting:** If users add hashtags in their feed posts, change the colors so they stand out from the text.
+- [ ] **Display Character Limit Counts:** Display a visible min and max character count for feed posts.
+- [ ] **Display Error Messages:** Display helpful error messages when creating a showcase post or editing a bio or creating a feed post or signing in/up.
 
 ### Search & Discovery
 
