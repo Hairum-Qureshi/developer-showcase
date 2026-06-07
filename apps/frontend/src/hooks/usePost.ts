@@ -138,5 +138,94 @@ export default function usePost() {
     },
   });
 
-  return { postMutation, allPostsData, postData, deletePostMutation };
+  const updatePostMutation = useMutation({
+    mutationFn: async ({
+      postID,
+      title,
+      markdownDescription,
+      tags,
+      projectLink,
+      liveLink,
+      thumbnail, // Can be File, string (URL), or undefined
+      slideShowImages, // Array containing mixed Files and strings (URLs)
+    }: {
+      postID: string;
+      title: string;
+      markdownDescription: string;
+      tags: string[];
+      projectLink: string;
+      liveLink: string;
+      thumbnail?: File | string;
+      slideShowImages?: (File | string)[];
+    }) => {
+      try {
+        const formData = new FormData();
+
+        formData.append("title", title);
+        formData.append("content", markdownDescription);
+        formData.append("projectRepoLink", projectLink || "");
+        formData.append("liveProjectLink", liveLink || "");
+
+        // Handle Tags
+        tags
+          .map((t) => t.trim())
+          .forEach((tag) => formData.append("tags", tag));
+
+        // 1. Handle Thumbnail
+        if (thumbnail instanceof File) {
+          // It's a new file, upload it!
+          formData.append("thumbnail", thumbnail);
+        } else if (typeof thumbnail === "string") {
+          // It's an existing URL, pass it as text so the backend knows it wasn't deleted
+          formData.append("retainedThumbnail", thumbnail);
+        }
+
+        // 2. Handle Slideshow Images
+        if (slideShowImages) {
+          const retainedUrls: string[] = [];
+
+          slideShowImages.forEach((item) => {
+            if (item instanceof File) {
+              // New file upload
+              formData.append("slideShowImages", item);
+            } else if (typeof item === "string") {
+              // Existing image URL being kept
+              retainedUrls.push(item);
+            }
+          });
+
+          // Send the list of existing URLs back to the backend as a JSON string
+          formData.append(
+            "retainedSlideShowImages",
+            JSON.stringify(retainedUrls),
+          );
+        }
+
+        const response = await axios.patch(
+          `${import.meta.env.VITE_BACKEND_URL}/api/post/${postID}/edit`,
+          formData,
+          { withCredentials: true },
+        );
+
+        return response.data;
+      } catch (error) {
+        console.error(
+          "Error updating post:",
+          (error as AxiosError).response?.data,
+        );
+      }
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["post", postId] });
+      navigate(`/post/${data.postID}`);
+    },
+  });
+
+  return {
+    postMutation,
+    allPostsData,
+    postData,
+    deletePostMutation,
+    updatePostMutation,
+  };
 }
