@@ -140,32 +140,37 @@ export class PostService {
     const postImageURLs = await this
       .sql`SELECT thumbnail_url, slideshow_image_urls FROM posts WHERE post_id=${postID}`;
 
-    const imageURLs = [
-      postImageURLs[0].thumbnail_url,
-      ...postImageURLs[0].slideshow_image_urls,
-    ];
+    if (postImageURLs.length! == 0) {
+      const imageURLs = [
+        postImageURLs[0].thumbnail_url,
+        ...postImageURLs[0].slideshow_image_urls,
+      ];
 
-    await this
-      .sql`DELETE FROM posts WHERE post_id=${postID} AND user_id=${userID}`;
+      await this
+        .sql`DELETE FROM posts WHERE post_id=${postID} AND user_id=${userID}`;
 
-    for (const url of imageURLs) {
-      if (url) {
-        const fileID = url.split('/')[3];
-        if (fileID) {
-          await firstValueFrom(
-            this.httpService.delete(
-              `https://api.uploadcare.com/files/${fileID}/storage/`,
-              {
-                headers: {
-                  Accept: 'application/vnd.uploadcare-v0.7+json',
-                  Authorization: `Uploadcare.Simple ${this.configService.get<string>('UPLOADCARE_PUBLIC_KEY')}:${this.configService.get<string>('UPLOADCARE_SECRET_KEY')}`,
+      for (const url of imageURLs) {
+        if (url) {
+          const fileID = url.split('/')[3];
+          if (fileID) {
+            await firstValueFrom(
+              this.httpService.delete(
+                `https://api.uploadcare.com/files/${fileID}/storage/`,
+                {
+                  headers: {
+                    Accept: 'application/vnd.uploadcare-v0.7+json',
+                    Authorization: `Uploadcare.Simple ${this.configService.get<string>('UPLOADCARE_PUBLIC_KEY')}:${this.configService.get<string>('UPLOADCARE_SECRET_KEY')}`,
+                  },
                 },
-              },
-            ),
-          );
+              ),
+            );
+          }
         }
       }
     }
+
+    await this
+      .sql`DELETE FROM posts WHERE post_id=${postID} AND user_id=${userID}`;
 
     return { message: 'Post deleted successfully' };
   }
