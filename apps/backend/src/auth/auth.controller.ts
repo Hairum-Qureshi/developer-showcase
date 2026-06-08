@@ -22,11 +22,12 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   private createCookie(res: Response, jwtToken: string) {
-    res.cookie(
-      'auth-session',
-      jwtToken,
-      this.authService.getAuthCookieOptions() as CookieOptions,
-    );
+    res.cookie('auth-session', jwtToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
   }
 
   @Post('sign-up')
