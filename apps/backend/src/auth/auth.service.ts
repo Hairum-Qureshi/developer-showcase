@@ -126,8 +126,14 @@ export class AuthService {
     const url = 'https://github.com/login/oauth/access_token';
 
     const body = {
-      client_id: this.configService.get<string>('GITHUB_CLIENT_ID'),
-      client_secret: this.configService.get<string>('GITHUB_CLIENT_SECRET'),
+      client_id:
+        this.configService.get<string>('NODE_ENV') === 'production'
+          ? this.configService.get<string>('GITHUB_CLIENT_ID_PROD')
+          : this.configService.get<string>('GITHUB_CLIENT_ID'),
+      client_secret:
+        this.configService.get<string>('NODE_ENV') === 'production'
+          ? this.configService.get<string>('GITHUB_CLIENT_SECRET_PROD')
+          : this.configService.get<string>('GITHUB_CLIENT_SECRET'),
       code: code,
     };
 
