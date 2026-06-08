@@ -178,11 +178,9 @@ export default function Profile() {
                     <Post
                       key={post.post_id}
                       postID={post.post_id}
-                      // Fixed: Safe fallback to empty string if undefined
                       thumbnail={post.thumbnail_url ?? ""}
                       title={post.title}
                       description={post.description}
-                      // Fixed: Safe fallbacks
                       githubLink={post.github_link ?? ""}
                       liveDemoLink={post.live_demo_link ?? ""}
                       tags={(post.tags as string[]) ?? []}
