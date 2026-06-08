@@ -93,7 +93,7 @@ export default function SignUp({
           className="w-full rounded-xl  hover:cursor-pointer  bg-blue-600 py-3 font-semibold text-white transition hover:bg-blue-500 active:scale-[0.99]"
           onClick={(e) =>
             handleSignUp(
-              e as unknown as React.FormEvent<HTMLFormElement>,
+              e as unknown as React.MouseEvent<HTMLButtonElement>,
               email,
               username,
               password,
