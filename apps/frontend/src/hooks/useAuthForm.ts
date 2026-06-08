@@ -70,7 +70,7 @@ export default function useAuthForm() {
   });
 
   const handleSignUp = (
-    e: React.FormEvent<HTMLFormElement>,
+    e: React.MouseEvent<HTMLButtonElement>,
     email: string,
     username: string,
     password: string,
@@ -100,7 +100,7 @@ export default function useAuthForm() {
   };
 
   const handleSignIn = (
-    e: React.FormEvent<HTMLFormElement>,
+    e: React.MouseEvent<HTMLButtonElement>,
     email: string,
     password: string,
   ) => {
