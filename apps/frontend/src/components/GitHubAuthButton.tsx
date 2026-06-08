@@ -11,7 +11,7 @@ export default function GitHubAuthButton({
       onClick={(e) => {
         e.preventDefault();
         window.location.assign(
-          `https://www.github.com/login/oauth/authorize?client_id=${import.meta.env.VITE_GITHUB_CLIENT_ID}&scope=user:email`,
+          `https://www.github.com/login/oauth/authorize?client_id=${import.meta.env.VITE_NODE_ENV === "production" ? import.meta.env.VITE_GITHUB_CLIENT_ID_PROD : import.meta.env.VITE_GITHUB_CLIENT_ID}&scope=user:email`,
         );
       }}
     >
