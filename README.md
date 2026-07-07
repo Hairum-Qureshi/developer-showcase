@@ -129,6 +129,8 @@ JWT_EXPIRES=604800000
 
 GITHUB_CLIENT_ID=your_github_client_id
 GITHUB_CLIENT_SECRET=your_github_client_secret
+GITHUB_CLIENT_ID_PROD=your_github_client_prod_id
+GITHUB_CLIENT_SECRET_PROD=your_github_client_prod_secret
 
 UPLOADCARE_PUBLIC_KEY=your_uploadcare_public_key
 UPLOADCARE_SECRET_KEY=your_uploadcare_secret_key
@@ -230,6 +232,8 @@ Add both values to the backend environment file:
 ```env
 GITHUB_CLIENT_ID=your_client_id
 GITHUB_CLIENT_SECRET=your_client_secret
+VITE_GITHUB_CLIENT_ID_PROD=your_github_client_prod_id
+VITE_GITHUB_CLIENT_SECRET_PROD=your_github_client_prod_secret
 ```
 
 And add the Client ID to the frontend:
